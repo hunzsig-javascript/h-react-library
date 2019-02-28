@@ -1,0 +1,22 @@
+@charset "UTF-8";
+
+.h-anchor{
+  padding-top: 3px;
+  a{
+    border-bottom: 1px dashed #aaa;
+    font-weight: bold;
+  }
+  a.passive{
+    color: #666;
+    border-bottom: 1px dashed transparent;
+    font-weight: normal;
+  }
+}
+.h-anchor.left{
+  padding-left: 15px;
+  text-align: left;
+}
+.h-anchor.right{
+  padding-right: 15px;
+  text-align: right;
+}

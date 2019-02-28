@@ -1,0 +1,150 @@
+@charset "UTF-8";
+
+.myFormLabel{
+  height: 32px;
+  line-height: 32px;
+  text-align: right;
+  //white-space: nowrap;
+  word-break: break-all;
+}
+.myFormLabel.required{
+  color: #ff6d74;
+  //font-weight: bold;
+}
+
+.myIcon {
+  margin-right: 3px;
+}
+
+.myform {
+  background-color: rgb(255, 255, 255);
+  border-radius: 6px;
+  padding: 20px;
+  margin-bottom: 20px;
+  .fromItemWidth0 { width: 100% }
+  .fromItemWidth1.str { width: 100% }
+  .fromItemWidth1.string { width: 100% }
+  .fromItemWidth1.text { width: 100% }
+  .fromItemWidth1.textarea { width: 100% }
+  .fromItemWidth1.multiple { width: 100% }
+  .fromItemWidth1.num { width: 100% }
+  .fromItemWidth1.number { width: 100% }
+  .fromItemWidth1.int { width: 100% }
+  .fromItemWidth1.integer { width: 100% }
+  .fromItemWidth1.select { width: 100% }
+  .fromItemWidth1.map { width: 100% }
+  .fromItemWidth1.date { width: 100% }
+  .fromItemWidth1.datetime { width: 100% }
+  .fromItemWidth1.time { width: 100% }
+  .fromItemWidth1.year { width: 100% }
+  .fromItemWidth1.month { width: 100% }
+  .fromItemWidth1.range { width: 96%;margin-left:2%;height: 32px;line-height: 32px; }
+  .fromItemWidth1.rangeDatetime { width: 100% }
+  .fromItemWidth1.rangeDate { width: 100% }
+  .fromItemWidth1.upload { width: 100% }
+
+  .fromItemWidth2.str { width: 100% }
+  .fromItemWidth2.string { width: 100% }
+  .fromItemWidth2.text { width: 100% }
+  .fromItemWidth2.textarea { width: 100% }
+  .fromItemWidth2.multiple { width: 100% }
+  .fromItemWidth2.num { width: 100% }
+  .fromItemWidth2.number { width: 100% }
+  .fromItemWidth2.int { width: 100% }
+  .fromItemWidth2.integer { width: 100% }
+  .fromItemWidth2.select { width: 100% }
+  .fromItemWidth2.map { width: 100% }
+  .fromItemWidth2.date { width: 100% }
+  .fromItemWidth2.datetime { width: 100% }
+  .fromItemWidth2.time { width: 100% }
+  .fromItemWidth2.year { width: 100% }
+  .fromItemWidth2.month { width: 100% }
+  .fromItemWidth2.range { width: 96%;margin-left:2%;height: 32px;line-height: 32px; }
+  .fromItemWidth2.rangeDatetime { width: 100% }
+  .fromItemWidth2.rangeDate { width: 100% }
+  .fromItemWidth2.upload { width: 100% }
+
+  .fromItemWidth3.str { width: 100% }
+  .fromItemWidth3.string { width: 100% }
+  .fromItemWidth3.text { width: 100% }
+  .fromItemWidth3.textarea { width: 100% }
+  .fromItemWidth3.multiple { width: 100% }
+  .fromItemWidth3.num { width: 100% }
+  .fromItemWidth3.number { width: 100% }
+  .fromItemWidth3.int { width: 100% }
+  .fromItemWidth3.integer { width: 100% }
+  .fromItemWidth3.select { width: 100% }
+  .fromItemWidth3.map { width: 100% }
+  .fromItemWidth3.date { width: 100% }
+  .fromItemWidth3.datetime { width: 100% }
+  .fromItemWidth3.time { width: 100% }
+  .fromItemWidth3.year { width: 100% }
+  .fromItemWidth3.month { width: 100% }
+  .fromItemWidth3.range { width: 96%;margin-left:2%;height: 32px;line-height: 32px; }
+  .fromItemWidth3.rangeDatetime { width: 100% }
+  .fromItemWidth3.rangeDate { width: 100% }
+  .fromItemWidth3.upload { width: 100% }
+
+  .fromItemWidth4.str { width: 100% }
+  .fromItemWidth4.string { width: 100% }
+  .fromItemWidth4.text { width: 100% }
+  .fromItemWidth4.textarea { width: 100% }
+  .fromItemWidth4.multiple { width: 100% }
+  .fromItemWidth4.num { width: 100% }
+  .fromItemWidth4.number { width: 100% }
+  .fromItemWidth4.int { width: 100% }
+  .fromItemWidth4.integer { width: 100% }
+  .fromItemWidth4.select { width: 100% }
+  .fromItemWidth4.map { width: 100% }
+  .fromItemWidth4.date { width: 100% }
+  .fromItemWidth4.datetime { width: 100% }
+  .fromItemWidth4.time { width: 100% }
+  .fromItemWidth4.year { width: 100% }
+  .fromItemWidth4.month { width: 100% }
+  .fromItemWidth4.range { width: 96%;margin-left:2%;height: 32px;line-height: 32px; }
+  .fromItemWidth4.rangeDatetime { width: 100% }
+  .fromItemWidth4.rangeDate { width: 100% }
+  .fromItemWidth4.upload { width: 100% }
+
+  @media (min-width: 1200px) {
+    .fromItemWidth1.str { width: 90% }
+    .fromItemWidth1.string { width: 90% }
+    .fromItemWidth1.text { width: 90% }
+    .fromItemWidth1.textarea { width: 90% }
+    .fromItemWidth1.multiple { width: 90% }
+    .fromItemWidth1.num { width: 90% }
+    .fromItemWidth1.number { width: 90% }
+    .fromItemWidth1.int { width: 90% }
+    .fromItemWidth1.integer { width: 90% }
+    .fromItemWidth1.select { width: auto }
+    .fromItemWidth1.map { width: auto }
+    .fromItemWidth1.date { width: 50% }
+    .fromItemWidth1.datetime { width: 50% }
+    .fromItemWidth1.time { width: 50% }
+    .fromItemWidth1.year { width: 50% }
+    .fromItemWidth1.month { width: 50% }
+    .fromItemWidth1.range { width: 73%; }
+    .fromItemWidth1.rangeDate { width: 75% }
+    .fromItemWidth1.upload { width: 90% }
+
+    .fromItemWidth2.select { width: auto }
+    .fromItemWidth2.map { width: auto }
+
+    .fromItemWidth3.select { width: auto }
+    .fromItemWidth3.map { width: auto }
+  }
+  @media (min-width: 720px) {
+    .fromItemWidth1.select { width: auto }
+    .fromItemWidth1.map { width: auto }
+    .fromItemWidth1.date { width: 75% }
+    .fromItemWidth1.datetime { width: 75% }
+    .fromItemWidth1.time { width: 75% }
+    .fromItemWidth1.year { width: 75% }
+    .fromItemWidth1.month { width: 75% }
+    .fromItemWidth1.range { width: 73%; }
+
+    .fromItemWidth2.select { width: auto }
+    .fromItemWidth2.map { width: auto }
+  }
+
+}
