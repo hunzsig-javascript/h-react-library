@@ -4,6 +4,11 @@ h-react-library是在antd,iceDesign基础上更进一步的常用react组件库
 >更新日志
 
 ```
+2019/02/28
+- adminLayout增加了一个路由参数singleMenu，设为true时顶部菜单会隐藏，登出按钮会合并到左侧菜单。singleMenu的菜单只会有index层路由
+```
+
+```
 2019/02/14
 - 增加了默认组件的I18n
 ```

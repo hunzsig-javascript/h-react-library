@@ -56,3 +56,10 @@
 .loginOut.ant-menu-item-selected{
   background: transparent!important;
 }
+.loginOutSingleMenu{
+  color: red;
+}
+.loginOutSingleMenu:hover{
+  color: red!important;
+  text-decoration: underline;
+}

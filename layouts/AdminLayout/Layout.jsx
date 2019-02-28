@@ -23,6 +23,7 @@ class hLayout extends Component {
     // todo 对应主题相关修正
     this.theme = {
       pathHideType: this.props.h.pathHideType || 'disabled',
+      singleMenu: (typeof this.props.h.singleMenu === 'boolean') ? this.props.h.singleMenu : false,
     };
     switch (this.props.h.theme) {
       case 'light':
@@ -298,24 +299,28 @@ class hLayout extends Component {
                 onClick={this.onMenuClick}
               >
                 {this.renderSub(this.children)}
+                {this.theme.singleMenu === true && <Menu.Item key="loginOut" className="loginOutSingleMenu"><Icon type="logout" />退出</Menu.Item>}
               </Menu>
             }
           </Sider>
           <Layout style={style.Layout}>
-            <Header style={{ height: this.theme.headerHeight, ...style.Header }}>
-              <Menu
-                theme={this.theme.type}
-                mode="horizontal"
-                selectedKeys={this.state.active}
-                style={style.HeaderMenu}
-                onClick={this.onMenuClick}
-              >
-                {this.state.routerHead.map((val) => {
-                  return <Menu.Item disabled={val.disabled} key={val.jumpPath}>{val.icon !== undefined ? val.icon : ''}{val.name}</Menu.Item>;
-                })}
-                <Menu.Item key="loginOut" className="loginOut"><Icon type="logout" />退出</Menu.Item>
-              </Menu>
-            </Header>
+            {
+              this.theme.singleMenu === false &&
+              <Header style={{ height: this.theme.headerHeight, ...style.Header }}>
+                <Menu
+                  theme={this.theme.type}
+                  mode="horizontal"
+                  selectedKeys={this.state.active}
+                  style={style.HeaderMenu}
+                  onClick={this.onMenuClick}
+                >
+                  {this.state.routerHead.map((val) => {
+                    return <Menu.Item disabled={val.disabled} key={val.jumpPath}>{val.icon !== undefined ? val.icon : ''}{val.name}</Menu.Item>;
+                  })}
+                  <Menu.Item key="loginOut" className="loginOut"><Icon type="logout" />退出</Menu.Item>
+                </Menu>
+              </Header>
+            }
             <Content style={style.Content} id="layout">
               {this.props.children}
             </Content>
