@@ -72,12 +72,10 @@ class hLayout extends Component {
               const permissionPath = this.getPermissionPath(resUser.data.user_permission, res.data.permission.system_data_data);
               const path = [];
               res.data.path.system_data_data.forEach((p) => {
-                console.log(p);
                 if (!permissionPath.includes(p.key)) {
                   path.push(p.key);
                 }
               });
-              console.log(path);
               this.state.path = path;
               this.setState({ path: this.state.path });
               this.routerFlat = this.flatRouter(this.routerAll);
@@ -100,14 +98,24 @@ class hLayout extends Component {
     });
   }
 
-  getPermissionPath = (userPermission, permission, path = [], prevKey = '') => {
+  getPermissionPath = (userPermission, permission, path = [], prevKey = []) => {
     if (!userPermission || !permission) return path;
     permission.forEach((p) => {
-      const nextKey = (prevKey !== '') ? `${prevKey}-${p.key}` : p.key;
-      if (userPermission.includes(nextKey)) {
+      const nextKey = JSON.parse(JSON.stringify(prevKey));
+      nextKey.push(p.key);
+      let flag = false;
+      const tempKey = [];
+      for (const i in nextKey) {
+        tempKey.push(nextKey[i]);
+        if (userPermission.includes(tempKey.join('-'))) {
+          flag = true;
+          break;
+        }
+      }
+      if (flag) {
         if (p.path && Array.isArray(p.path)) {
           p.path.forEach((pp) => {
-            path.push(pp);
+            if(!path.includes(pp)) path.push(pp);
           });
         }
       }

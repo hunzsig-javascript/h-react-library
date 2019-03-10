@@ -69,7 +69,7 @@ export default class Hoss extends Component {
   renderUpload = (type) => {
     let tpl = null;
     switch (type) {
-    case 'upload.hoss.image':
+    case 'uploadHossImage':
       tpl = (
         <ImageUpload
           action="/api/http"
@@ -98,7 +98,7 @@ export default class Hoss extends Component {
         />
       );
       break;
-    case 'upload.hoss.drag':
+    case 'uploadHossDrag':
       tpl = (
         <DragUpload
           action="/api/http"
@@ -126,7 +126,7 @@ export default class Hoss extends Component {
         />
       );
       break;
-    case 'upload.hoss.crop':
+    case 'uploadHossCrop':
       tpl = (
         <div>
           <CropUpload
@@ -205,7 +205,7 @@ export default class Hoss extends Component {
         </div>
       );
       break;
-    case 'upload.hoss':
+    case 'uploadHoss':
     default:
       tpl = (
         <Upload

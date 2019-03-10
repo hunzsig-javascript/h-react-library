@@ -545,7 +545,7 @@ export default class DesktopForm extends Component {
         </Col>
       );
       break;
-    case 'search.text':
+    case 'searchText':
       tpl = (
         <Col key={idx} {...col[c]} align={align}>
           <Row wrap>
@@ -865,7 +865,7 @@ export default class DesktopForm extends Component {
         </Col>
       );
       break;
-    case 'checkbox.col':
+    case 'checkboxCol':
       tpl = (
         <Col key={idx} {...col[c]} align={align}>
           <Row wrap>
@@ -1294,10 +1294,10 @@ export default class DesktopForm extends Component {
         </Col>
       );
       break;
-    case 'upload.hoss':
-    case 'upload.hoss.image':
-    case 'upload.hoss.crop':
-    case 'upload.hoss.drag':
+    case 'uploadHoss':
+    case 'uploadHossImage':
+    case 'uploadHossCrop':
+    case 'uploadHossDrag':
       tpl = (
         <Col key={idx} {...col[c]} align={align}>
           <Row wrap>
@@ -1323,10 +1323,10 @@ export default class DesktopForm extends Component {
       );
       break;
     /*
-    case 'upload.alioss':
-    case 'upload.alioss.image':
-    case 'upload.alioss.crop':
-    case 'upload.alioss.drag':
+    case 'uploadAlioss':
+    case 'uploadAliossImage':
+    case 'uploadAliossCrop':
+    case 'uploadAliossDrag':
       tpl = (
         <Col key={idx} {...col[c]} align={align}>
           <Row wrap>
@@ -1398,7 +1398,7 @@ export default class DesktopForm extends Component {
         </Col>
       );
       break;
-    case 'tree.select':
+    case 'treeSelect':
       tpl = (
         <Col key={idx} {...col[c]} align={align}>
           <Row wrap>
@@ -1444,7 +1444,7 @@ export default class DesktopForm extends Component {
         </Col>
       );
       break;
-    case 'rich.quill':
+    case 'richQuill':
       tpl = (
         <Col key={idx} {...col[c]} align={align}>
           <Row wrap>

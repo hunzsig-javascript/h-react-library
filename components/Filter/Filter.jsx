@@ -410,7 +410,7 @@ export default class Filter extends Component {
         </Col>
       );
       break;
-    case 'tree.select':
+    case 'treeSelect':
       tpl = (
         <Col key={idx} {...col[2]} style={styles.filterCol} align={align}>
           <label style={styles.filterTitle}>{val.name}：</label>

@@ -4,6 +4,12 @@ h-react-library是在antd,iceDesign基础上更进一步的常用react组件库
 >更新日志
 
 ```
+2019/03/01
+- 修复了adminLayout中部分路径地址无法获取的bug
+- 为了与css同步样式，DesktopForm里面的itemtype全部改为驼峰形式
+```
+
+```
 2019/02/28
 - adminLayout增加了一个路由参数singleMenu，设为true时顶部菜单会隐藏，登出按钮会合并到左侧菜单。singleMenu的菜单只会有index层路由
 ```
@@ -106,7 +112,7 @@ h-react-library是在antd,iceDesign基础上更进一步的常用react组件库
 ```
 2018/07/11
 - FilterTable支持自定义列内容renderColumn
-- Form新增checkbox checkbox.col
+- Form新增checkbox checkboxCol
 ```
 ```
 2018/07/10

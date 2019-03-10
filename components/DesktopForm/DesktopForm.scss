@@ -32,6 +32,7 @@
   .fromItemWidth1.int { width: 100% }
   .fromItemWidth1.integer { width: 100% }
   .fromItemWidth1.select { width: 100% }
+  .fromItemWidth1.treeSelect { width: 100% }
   .fromItemWidth1.map { width: 100% }
   .fromItemWidth1.date { width: 100% }
   .fromItemWidth1.datetime { width: 100% }
@@ -53,6 +54,7 @@
   .fromItemWidth2.int { width: 100% }
   .fromItemWidth2.integer { width: 100% }
   .fromItemWidth2.select { width: 100% }
+  .fromItemWidth2.treeSelect { width: 100% }
   .fromItemWidth2.map { width: 100% }
   .fromItemWidth2.date { width: 100% }
   .fromItemWidth2.datetime { width: 100% }
@@ -74,6 +76,7 @@
   .fromItemWidth3.int { width: 100% }
   .fromItemWidth3.integer { width: 100% }
   .fromItemWidth3.select { width: 100% }
+  .fromItemWidth3.treeSelect { width: 100% }
   .fromItemWidth3.map { width: 100% }
   .fromItemWidth3.date { width: 100% }
   .fromItemWidth3.datetime { width: 100% }
@@ -95,6 +98,7 @@
   .fromItemWidth4.int { width: 100% }
   .fromItemWidth4.integer { width: 100% }
   .fromItemWidth4.select { width: 100% }
+  .fromItemWidth4.treeSelect { width: 100% }
   .fromItemWidth4.map { width: 100% }
   .fromItemWidth4.date { width: 100% }
   .fromItemWidth4.datetime { width: 100% }
@@ -117,6 +121,7 @@
     .fromItemWidth1.int { width: 90% }
     .fromItemWidth1.integer { width: 90% }
     .fromItemWidth1.select { width: auto }
+    .fromItemWidth1.treeSelect { width: 90% }
     .fromItemWidth1.map { width: auto }
     .fromItemWidth1.date { width: 50% }
     .fromItemWidth1.datetime { width: 50% }
@@ -128,6 +133,7 @@
     .fromItemWidth1.upload { width: 90% }
 
     .fromItemWidth2.select { width: auto }
+    .fromItemWidth2.treeSelect { width: 100% }
     .fromItemWidth2.map { width: auto }
 
     .fromItemWidth3.select { width: auto }
@@ -144,6 +150,7 @@
     .fromItemWidth1.range { width: 73%; }
 
     .fromItemWidth2.select { width: auto }
+    .fromItemWidth2.treeSelect { width: 75% }
     .fromItemWidth2.map { width: auto }
   }
 
