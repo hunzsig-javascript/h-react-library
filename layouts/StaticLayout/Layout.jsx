@@ -300,7 +300,9 @@ class hLayout extends Component {
             }
           </Header>
           <Content className={`hContent ${this.props.h.theme} ${this.screenWidth >= 970 ? 'big' : 'small'}`}>
-            {this.props.children}
+            <div className="inner">
+              {this.props.children}
+            </div>
           </Content>
         </Layout>
       </Layout>

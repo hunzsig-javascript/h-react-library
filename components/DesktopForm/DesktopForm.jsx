@@ -1562,62 +1562,65 @@ export default class DesktopForm extends Component {
             </Col>
           </Row>
         }
-        <Row wrap>
-          <Col {...defaultCol[this.state.items[0].col || 0].label} className="myFormLabel">&nbsp;</Col>
-          <Col {...defaultCol[this.state.items[0].col || 0].item} style={{ textAlign: this.state.align }}>
-            {
-              this.state.operation !== undefined && this.state.operation.map((op, idx) => {
-                let optpl = null;
-                switch (op.type) {
-                case 'submit':
-                  optpl = (
-                    <Button
-                      key={idx}
-                      type="primary"
-                      onClick={this.validateAllFormField}
-                      disabled={this.state.loading}
-                      loading={this.state.loading}
-                    >
-                      {op.label || I18n.translate('submit')}
-                    </Button>
-                  );
-                  break;
-                case 'reset':
-                  optpl = (
-                    <Button
-                      style={{ marginLeft: '3px' }}
-                      key={idx}
-                      type="default"
-                      onClick={this.reset}
-                      disabled={this.state.loading}
-                      loading={this.state.loading}
-                    >
-                      {op.label || I18n.translate('reset')}
-                    </Button>
-                  );
-                  break;
-                case 'trigger':
-                  optpl = (
-                    <Button
-                      style={{ marginLeft: '3px' }}
-                      key={idx}
-                      onClick={op.onClick}
-                      disabled={this.state.loading}
-                      loading={this.state.loading}
-                      {...op.params}
-                    >
-                      {op.label || I18n.translate('trigger')}
-                    </Button>
-                  );
-                  break;
-                default:
-                  break;
-                }
-                return optpl;
-              })
-            }
-          </Col>
-        </Row>
+        {
+          this.state.operation !== undefined && this.state.operation.length > 0 &&
+          <Row wrap>
+            <Col {...defaultCol[this.state.items[0].col || 0].label} className="myFormLabel">&nbsp;</Col>
+            <Col {...defaultCol[this.state.items[0].col || 0].item} style={{ textAlign: this.state.align }}>
+              {
+                this.state.operation.map((op, idx) => {
+                  let optpl = null;
+                  switch (op.type) {
+                    case 'submit':
+                      optpl = (
+                        <Button
+                          key={idx}
+                          type="primary"
+                          onClick={this.validateAllFormField}
+                          disabled={this.state.loading}
+                          loading={this.state.loading}
+                        >
+                          {op.label || I18n.translate('submit')}
+                        </Button>
+                      );
+                      break;
+                    case 'reset':
+                      optpl = (
+                        <Button
+                          style={{ marginLeft: '3px' }}
+                          key={idx}
+                          type="default"
+                          onClick={this.reset}
+                          disabled={this.state.loading}
+                          loading={this.state.loading}
+                        >
+                          {op.label || I18n.translate('reset')}
+                        </Button>
+                      );
+                      break;
+                    case 'trigger':
+                      optpl = (
+                        <Button
+                          style={{ marginLeft: '3px' }}
+                          key={idx}
+                          onClick={op.onClick}
+                          disabled={this.state.loading}
+                          loading={this.state.loading}
+                          {...op.params}
+                        >
+                          {op.label || I18n.translate('trigger')}
+                        </Button>
+                      );
+                      break;
+                    default:
+                      break;
+                  }
+                  return optpl;
+                })
+              }
+            </Col>
+          </Row>
+        }
       </div>
     );
   }
