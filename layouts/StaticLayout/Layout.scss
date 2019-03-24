@@ -36,6 +36,10 @@ $primaryColor:#e04240;
   overflow: auto;
   margin: 0;
   background: #272727;
+  .inner{
+    max-width: 2000px;
+    margin: 0 auto;
+  }
 }
 .hContent.big{
   padding-top: 50px;

@@ -172,6 +172,17 @@ const Parse = {
   jsonEncode: (json) => {
     return JSON.stringify(json);
   },
+  /**
+   * 多位数四舍五入
+   * @param num
+   * @param v
+   * @returns {number}
+   */
+  decimal: (num, v) => {
+    const vv = Math.pow(10, v);
+    const result = Math.round(num * vv) / vv;
+    return isNaN(result) ? 0 : parseFloat(result.toFixed(v));
+  },
 
 };
 
