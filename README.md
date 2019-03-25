@@ -1,15 +1,17 @@
 #h-react-library <a href="https://github.com/hunzsig/h-react-library" target="_blank">GitHub</a>
 ##h-react-library是在antd,iceDesign基础上更进一步的常用react组件库
 ##更新日志
+###2019/03/25
+    修复了StaticLayout二级子菜单高亮错误的问题
 ###2019/03/24
     现在DesktopForm在setItems时，会考虑初始设定的value值
 ###2019/03/17
-    优化了staticLayout在大屏幕下的体现
+    优化了StaticLayout在大屏幕下的体现
 ###2019/03/01
-    修复了adminLayout中部分路径地址无法获取的bug
+    修复了AdminLayout中部分路径地址无法获取的bug
     为了与css同步样式，DesktopForm里面的itemtype全部改为驼峰形式
 ###2019/02/28
-    adminLayout增加了一个路由参数singleMenu，设为true时顶部菜单会隐藏，登出按钮会合并到左侧菜单。
+    AdminLayout增加了一个路由参数singleMenu，设为true时顶部菜单会隐藏，登出按钮会合并到左侧菜单。
     singleMenu的菜单只会有index层路由
 ###2019/02/14
     增加了默认组件的I18n

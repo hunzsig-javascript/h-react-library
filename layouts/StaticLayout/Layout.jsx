@@ -131,9 +131,6 @@ class hLayout extends Component {
     paths.forEach((val) => {
       temp += (temp === '/') ? val : '/' + val;
       active.push(temp);
-      if (this.routerFlat[temp] !== undefined && !active.includes(this.routerFlat[temp].jumpPath)) {
-        active.push(this.routerFlat[temp].jumpPath);
-      }
     });
     if (paths.length === 2 && paths[1] === '') {
       active.push(this.routerAll[0].jumpPath);
