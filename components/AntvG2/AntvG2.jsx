@@ -42,6 +42,9 @@ export default class AntvG2 extends Component {
       case 'series':
         chart = React.createElement(Loadable({ loader: () => import('./Charts/Line/LineSeries'), loading: AntvLoading }), { dataSet: dataSet });
         break;
+      case 'double':
+        chart = React.createElement(Loadable({ loader: () => import('./Charts/Line/LineDouble'), loading: AntvLoading }), { dataSet: dataSet });
+        break;
       default:
         console.error(`antv G2 error main type: ${subType}`);
         break;

@@ -183,6 +183,15 @@ const Parse = {
     const result = Math.round(num * vv) / vv;
     return isNaN(result) ? 0 : parseFloat(result.toFixed(v));
   },
+  /**
+   * 随机证书
+   * @param min
+   * @param max
+   * @returns {number}
+   */
+  randInt: (min, max) => {
+    return parseInt(Math.random() * (max - min + 1) + min, 10);
+  },
 
 };
 

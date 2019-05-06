@@ -1,0 +1,52 @@
+{
+  "name": "h-react-library",
+  "version": "1.0.1",
+  "description": "react-library by hunzsig",
+  "directories": {
+    "lib": "lib"
+  },
+  "keywords": [
+    "hunzsig","antd","antv","icedesign"
+  ],
+  "author": "hunzsig",
+  "license": "MIT",
+  "bundleDependencies": [],
+  "dependencies": {
+    "@antv/data-set": "latest",
+    "@icedesign/base": "^0.2.0",
+    "@icedesign/form-binder": "^0.1.4",
+    "ali-oss": "^5.3.0",
+    "antd": "latest",
+    "axios": "^0.18.0",
+    "bizcharts": "latest",
+    "bizcharts-plugin-slider": "^2.0.7",
+    "classnames": "^2.2.5",
+    "crypto-js": "^3.1.9-1",
+    "enquire-js": "^0.1.2",
+    "foundation-symbol": "^0.1.3",
+    "immutable": "^3.8.2",
+    "js-excel-zip": "latest",
+    "prop-types": "^15.5.8",
+    "react-beautiful-dnd": "^8.0.5",
+    "react-color": "^2.14.1",
+    "react-copy-to-clipboard": "^5.0.1",
+    "react-document-title": "^2.0.3",
+    "react-draggable-tags": "^0.2.1",
+    "react-loadable": "^5.4.0",
+    "react-quill": "^1.2.7",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
+    "react-trello": "^1.29.1"
+  },
+  "deprecated": false,
+  "devDependencies": {
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -834,7 +834,7 @@ export default class DesktopForm extends Component {
               {val.name && val.name.length > 0 && <label>{val.name}：</label>}
             </Col>
             <Col {...defaultCol[c].item} style={styles.formItem}>
-              <IceFormBinder name={val.field} message={I18n.translate('pleaseChoose') + val.name} valueFormatter={(e) => { return this.binderValueFormatter(val, e); }}>
+              <IceFormBinder type={val.binderType || 'string'} name={val.field} message={I18n.translate('pleaseChoose') + val.name} valueFormatter={(e) => { return this.binderValueFormatter(val, e); }}>
                 <Radio.Group
                   defaultValue={this.state.value}
                   className={`fromItemWidth${c} ${val.type}`}
@@ -982,8 +982,9 @@ export default class DesktopForm extends Component {
               {val.name && val.name.length > 0 && <label>{val.name}：</label>}
             </Col>
             <Col {...defaultCol[c].item} style={styles.formItem}>
-              <IceFormBinder name={val.field} message={I18n.translate('pleaseChoose') + val.name} valueFormatter={(v1, v2) => { return this.binderValueFormatter(val, v1, v2); }}>
+              <IceFormBinder type={val.binderType || 'array'} name={val.field} message={I18n.translate('pleaseChoose') + val.name} valueFormatter={(v1, v2) => { return this.binderValueFormatter(val, v1, v2); }}>
                 <Cascader
+                  style={{ textAlign: 'left' }}
                   className={`fromItemWidth${c} ${val.type}`}
                   size={size}
                   placeholder={I18n.translate('pleaseChoose') + val.name}
@@ -1420,7 +1421,7 @@ export default class DesktopForm extends Component {
                   allowClear
                   treeDefaultExpandAll
                   defaultValue={val.value}
-                  treeCheckable={true}
+                  treeCheckable={ val.treeCheckable === undefined ? true : false }
                   showCheckedStrategy={TreeSelect.SHOW_PARENT}
                   className={`fromItemWidth${c} ${val.type}`}
                   size={size}

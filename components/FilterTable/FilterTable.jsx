@@ -19,10 +19,15 @@ export default class EnhanceTable extends Component {
     this.title = this.props.title || I18n.translate('oneList');
     this.hasBorder = typeof this.props.hasBorder === 'boolean' ? this.props.hasBorder : true;
     this.maxBodyHeight = this.props.maxBodyHeight || 500;
+    this.isTree = this.props.isTree || false;
 
     this.scope = this.props.table.scope;
     this.onQuery = this.props.table.onQuery;
     this.onAdd = this.props.table.onAdd;
+    this.onSelected = this.props.table.onSelected || null;
+    this.onAdd2 = this.props.table.onAdd2;
+    this.onAddName = this.props.table.onAddName || I18n.translate('add');
+    this.onAdd2Name = this.props.table.onAdd2Name || '添加';
     this.onExcelPush = this.props.table.onExcelPush;
     this.onExcelPull = this.props.table.onExcelPull;
     this.onPrint = this.props.table.onPrint;
@@ -31,6 +36,7 @@ export default class EnhanceTable extends Component {
     this.filter = this.props.table.filter || [];
     this.filterFormatter = this.props.table.filterFormatter;
     this.operation = this.props.table.operation || [];
+    this.operationWidth = this.props.table.operationWidth || 200;
     this.state = {
       loading: true,
       result: [],
@@ -41,7 +47,7 @@ export default class EnhanceTable extends Component {
       isSearch: typeof this.props.isSearch === 'boolean' ? this.props.isSearch : false,
     };
     // 加序号
-    this.state.display.unshift({ field: 'serial', name: I18n.translate('serial'), width: 100 });
+    this.state.display.unshift({ field: 'serial', name: I18n.translate('serial'), width: 63, align: 'center' });
     // 如果遇到分页的设定，在开头加上分页条数
     if (this.state.params.page === 1) {
       this.state.params.pageCurrent = 0;
@@ -311,7 +317,8 @@ export default class EnhanceTable extends Component {
         <h2 style={styles.contentTitle}>
           <div>
             {this.title}
-            {typeof this.onAdd === 'function' && <Button type="primary" size="small" style={{ marginLeft: '3px' }} onClick={this.onAdd}>{I18n.translate('add')}</Button>}
+            {typeof this.onAdd === 'function' && <Button type="primary" size="small" style={{ marginLeft: '3px' }} onClick={this.onAdd}>{this.onAddName}</Button>}
+            {typeof this.onAdd2 === 'function' && <Button type="default" size="small" style={{ marginLeft: '3px' }} onClick={this.onAdd2}>{this.onAdd2Name}</Button>}
             {typeof this.onExcelPush === 'function' && <Button type="default" size="small" style={{ marginLeft: '3px' }} onClick={this.onExcelPush}>{I18n.translate('import')}</Button>}
             {typeof this.onExcelPull === 'function' && <Button type="dashed" size="small" style={{ marginLeft: '3px' }} onClick={this.onExcelPull}>{I18n.translate('export')}</Button>}
             {typeof this.onPrint === 'function' && <Button type="default" size="small" style={{ marginLeft: '3px' }} onClick={this.onPrint}>{I18n.translate('print')}</Button>}
@@ -363,18 +370,20 @@ export default class EnhanceTable extends Component {
             maxBodyHeight={this.maxBodyHeight}
             onSort={this.onSort.bind(this)}
             primaryKey="serial"
+            isTree={this.isTree}
+            rowSelection={this.onSelected}
           >
             {
               this.state.display.map((d, idx) => {
                 const renderColumn = (typeof d.renderColumn === 'function') ? d.renderColumn : this.renderColumn;
-                return <Table.Column key={idx} title={d.name} cell={renderColumn.bind(this, d)} width={d.width} sortable={typeof d.sortable === 'boolean' ? d.sortable : false} />;
+                return <Table.Column key={idx} title={d.name} cell={renderColumn.bind(this, d)} width={d.width} sortable={typeof d.sortable === 'boolean' ? d.sortable : false} align={d.align || 'left'} />;
               })
             }
             {
               this.operation.length > 0 &&
               <Table.Column
                 title={I18n.translate('operation')}
-                width={200}
+                width={this.operationWidth}
                 cell={this.renderOperations}
               />
             }
@@ -406,7 +415,7 @@ export default class EnhanceTable extends Component {
 const styles = {
   content: {
     width: '100%',
-    minWidth: '1200px',
+    minWidth: '100%',
     position: 'relative',
     backgroundColor: 'rgb(255, 255, 255)',
     borderRadius: '6px',

@@ -25,7 +25,7 @@ export default class PieDonut extends Component {
             return <Axis key={aidx} {...axis} />;
           })
         }
-        <Legend position="right" offsetY={-(this.dataSet.params.height) / 2 + 120} offsetX={-100} />
+       {/* <Legend position="right" offsetY={-(this.dataSet.params.height) / 2 + 120} offsetX={-100} />*/}
         <Tooltip
           showTitle={false}
           itemTpl='<li><span style="background-color:{color};" class="g2-tooltip-marker"></span>{name}: {value}</li>'
