@@ -101,7 +101,6 @@ class hLayout extends Component {
   headRouter = () => {
     const head = [];
     hRouter.config.forEach((val) => {
-      console.log(val.path);
       if (['/', '*', '/sign'].includes(val.path) === false && val.hide !== true) {
         if (this.state.path.includes(val.jumpPath)) {
           let isOK = false;

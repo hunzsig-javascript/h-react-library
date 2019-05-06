@@ -1,1 +1,3 @@
-<a href="https://gitlab.com/h-web/h-react-library">已全部转移到gitlab https://gitlab.com/h-web/h-react-library</a>
+## h-react-library <a href="https://github.com/hunzsig/h-react-library" target="_blank">GitHub</a>
+### 依赖antd,antv,iceDesign等组件库
+#### 在基础上更进一步的常用react组件库

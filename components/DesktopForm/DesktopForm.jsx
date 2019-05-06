@@ -982,7 +982,7 @@ export default class DesktopForm extends Component {
               {val.name && val.name.length > 0 && <label>{val.name}：</label>}
             </Col>
             <Col {...defaultCol[c].item} style={styles.formItem}>
-              <IceFormBinder name={val.field} message={I18n.translate('pleaseChoose') + val.name} valueFormatter={(v1, v2) => { return this.binderValueFormatter(val, v1, v2); }}>
+              <IceFormBinder type={val.binderType || 'array'} name={val.field} message={I18n.translate('pleaseChoose') + val.name} valueFormatter={(v1, v2) => { return this.binderValueFormatter(val, v1, v2); }}>
                 <Cascader
                   className={`fromItemWidth${c} ${val.type}`}
                   size={size}

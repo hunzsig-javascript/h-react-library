@@ -183,6 +183,29 @@ const Parse = {
     const result = Math.round(num * vv) / vv;
     return isNaN(result) ? 0 : parseFloat(result.toFixed(v));
   },
+  /**
+   * 随机整数
+   * @param min
+   * @param max
+   * @returns {number}
+   */
+  randInt: (min, max) => {
+    return parseInt(Math.random() * (max - min + 1) + min, 10);
+  },
+
+  /**
+   * 数组洗牌
+   * @returns {Parse}
+   */
+  shuffle: function (a) {
+    const arr = JSON.parse(JSON.stringify(a));
+    let m = arr.length, i;
+    while (m) {
+      i = (Math.random() * m--) >>> 0;
+      [arr[m], arr[i]] = [arr[i], arr[m]]
+    }
+    return arr;
+  },
 
 };
 
