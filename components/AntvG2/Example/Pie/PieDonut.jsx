@@ -48,7 +48,7 @@ export default class PieDonut extends Component {
               };
             },
           ],
-          style: { lineWidth: 1, stroke: '#fff' },
+          style: { lineWidth: 1, stroke: '#000' },
         },
       ],
       label: [

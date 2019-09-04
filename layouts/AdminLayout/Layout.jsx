@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Spin, Layout, Menu, Icon, message } from 'antd';
+import { Spin, Layout, Menu, Icon, message, Button, notification } from 'antd';
 import { withRouter } from 'react-router-dom';
 import hRouter from '../../hRouter';
 import Img from '../../components/Img';
@@ -32,7 +32,7 @@ class hLayout extends Component {
         break;
       default:
         this.theme.type = 'dark';
-        this.theme.headerHeight = '50px';
+        this.theme.headerHeight = '60px';
         break;
     }
     if (Auth.isOnline() === false) {
@@ -96,6 +96,33 @@ class hLayout extends Component {
         message.error(resUser.response);
       }
     });
+    /*Api.real('WisdomWindow.WarnNotice.getList', { is_read: -1 }, (resWarn) => {
+      if (resWarn.code === 200) {
+        if(resWarn.data.length > 0) {
+          const close = () => {
+            console.log(
+              'Notification was closed. Either the close button was clicked or duration time elapsed.',
+            );
+          };
+          const key = `open${Date.now()}`;
+          const btn = (
+            <Button type="primary" size="small" onClick={() => {this.props.history.replace('/window/timecard/warn'); }}>
+              查看
+            </Button>
+          );
+          notification.open({
+            message: '预警通知',
+            description:
+              '目前有' + resWarn.data.length + '未读消息',
+            btn,
+            key,
+            onClose: close,
+          });
+        }
+      } else {
+        message.error(resWarn.response);
+      }
+    });*/
   }
 
   getPermissionPath = (userPermission, permission, path = [], prevKey = []) => {
@@ -322,6 +349,7 @@ class hLayout extends Component {
                   style={style.HeaderMenu}
                   onClick={this.onMenuClick}
                 >
+                  <Menu.Item className="indexMenu">智慧大厅管理系统</Menu.Item>
                   {this.state.routerHead.map((val) => {
                     return <Menu.Item disabled={val.disabled} key={val.jumpPath}>{val.icon !== undefined ? val.icon : ''}{val.name}</Menu.Item>;
                   })}
@@ -344,7 +372,7 @@ const style = {
   FullHV: { minHeight: '100hv' },
   Layout: { height: '100hv', display: 'flex', flexDirection: 'column' },
   Header: { margin: 0, padding: 0 },
-  HeaderMenu: { lineHeight: '50px' },
+  HeaderMenu: { lineHeight: '60px', textAlign: 'right', background: '#3080fe' },
   Content: { margin: 0, background: '#ffffff' },
 };
 
