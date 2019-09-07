@@ -19,7 +19,7 @@ const Api = {
    * @param type 类型 http | ws
    * @param crypto
    */
-  setHost: (key, host, type = 'HTTP', crypto = null) => {
+  set: (key, host, type = 'HTTP', crypto = null) => {
     Api.setting[key] = {
       host: host,
       type: type.toUpperCase(),
