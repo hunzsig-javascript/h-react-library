@@ -1,7 +1,4 @@
-import Http from './Http';
-import Ws from './Ws';
-import Auth from './../Auth';
-import I18n from "../I18n";
+import ApiConnect from "./ApiConnect";
 
 /**
  * api 请求
@@ -12,134 +9,37 @@ import I18n from "../I18n";
  * @constructor
  */
 const Api = {
-  type: null,
-  host: null,
-  crypto: null,
-  setType: (t) => {
-    Api.type = t.toUpperCase();
+
+  setting: {},
+
+  /**
+   * 配置host
+   * @param key 唯一key
+   * @param host 链接
+   * @param type 类型 http | ws
+   * @param crypto
+   */
+  setHost: (key, host, type = 'HTTP', crypto = null) => {
+    Api.setting[key] = {
+      host: host,
+      type: type.toUpperCase(),
+      crypto: crypto || null,
+    };
   },
-  setHost: (h) => {
-    Api.host = h;
-  },
-  setCrypto: (c) => {
-    Api.crypto = c;
-  },
-  // TODO CACHE
-  cache: (scope, params, then) => {
-    switch (Api.type) {
-      case 'HTTP':
-        Http.PathLogin = Auth.getLoginPath();
-        Http.cache({
-          host: Api.host,
-          scope: scope,
-          params: params,
-          then: then,
-          crypto: Api.crypto,
-        });
-        break;
-      case 'HTTP.SHARP':
-        Http.PathLogin = '/#' + Auth.getLoginPath();
-        Http.cache({
-          host: Api.host,
-          scope: scope,
-          params: params,
-          then: then,
-          crypto: Api.crypto,
-        });
-        break;
-      case 'HTTP.REST':
-        Http.PathLogin = Auth.getLoginPath();
-        Http.cache({
-          host: Api.host + scope,
-          scope: '',
-          params: params,
-          then: then,
-          crypto: Api.crypto,
-        });
-        break;
-      case 'WS':
-        Ws.PathLogin = Auth.getLoginPath();
-        Ws.cache({
-          host: Api.host,
-          scope: scope,
-          params: params,
-          then: then,
-          crypto: Api.crypto,
-        });
-        break;
-      case 'WS.SHARP':
-        Ws.PathLogin = '/#' + Auth.getLoginPath();
-        Ws.cache({
-          host: Api.host,
-          scope: scope,
-          params: params,
-          then: then,
-          crypto: Api.crypto,
-        });
-        break;
-      default:
-        console.error(I18n.translate('apiTypeError'));
-        break;
+
+  /**
+   *
+   * @param hostKey
+   * @returns {ApiConnect}
+   */
+  connect: (hostKey = 'default') => {
+    const setting = Api.setting[hostKey];
+    if (setting === null) {
+      throw 'setting error';
     }
+    return new ApiConnect(setting);
   },
-  // TODO REAL
-  real: (scope, params, then) => {
-    switch (Api.type) {
-      case 'HTTP':
-        Http.PathLogin = Auth.getLoginPath();
-        Http.real({
-          host: Api.host,
-          scope: scope,
-          params: params,
-          then: then,
-          crypto: Api.crypto,
-        });
-        break;
-      case 'HTTP.SHARP':
-        Http.PathLogin = '/#' + Auth.getLoginPath();
-        Http.real({
-          host: Api.host,
-          scope: scope,
-          params: params,
-          then: then,
-          crypto: Api.crypto,
-        });
-        break;
-      case 'HTTP.REST':
-        Http.PathLogin = Auth.getLoginPath();
-        Http.real({
-          host: Api.host + scope,
-          scope: '',
-          params: params,
-          then: then,
-          crypto: Api.crypto,
-        });
-        break;
-      case 'WS':
-        Ws.PathLogin = Auth.getLoginPath();
-        Ws.real({
-          host: Api.host,
-          scope: scope,
-          params: params,
-          then: then,
-          crypto: Api.crypto,
-        });
-        break;
-      case 'WS.SHARP':
-        Ws.PathLogin = '/#' + Auth.getLoginPath();
-        Ws.real({
-          host: Api.host,
-          scope: scope,
-          params: params,
-          then: then,
-          crypto: Api.crypto,
-        });
-        break;
-      default:
-        console.error(I18n.translate('apiTypeError'));
-        break;
-    }
-  },
+
 };
 
 export default Api;
