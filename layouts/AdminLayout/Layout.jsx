@@ -349,7 +349,7 @@ class hLayout extends Component {
                   style={style.HeaderMenu}
                   onClick={this.onMenuClick}
                 >
-                  <Menu.Item className="indexMenu">智慧大厅管理系统</Menu.Item>
+                  <Menu.Item className="indexMenu">ucprimeconnect</Menu.Item>
                   {this.state.routerHead.map((val) => {
                     return <Menu.Item disabled={val.disabled} key={val.jumpPath}>{val.icon !== undefined ? val.icon : ''}{val.name}</Menu.Item>;
                   })}
