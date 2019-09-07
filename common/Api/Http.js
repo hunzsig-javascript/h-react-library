@@ -74,12 +74,12 @@ const Http = {
         if (typeof response.data === 'object') {
           if (typeof response.data.code === 'number' && response.data.code === 403) {
             if (Auth.getUid() !== undefined) {
-              if (response.data.response === 'illegal permission online') {
+              if (response.data.msg === 'illegal permission online') {
                 message.error(Http.TipsLogin, 2.00, () => {
                   Parse.locationTo(Http.PathLogin);
                 });
               } else {
-                message.warning(response.data.response + ' ^_^');
+                message.warning(response.data.msg + ' ^_^');
               }
             }
             then({ code: 500, response: I18n.translate('limitedOperation'), data: null });
