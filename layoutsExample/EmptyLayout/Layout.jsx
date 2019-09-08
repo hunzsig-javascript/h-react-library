@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { Layout, Button, message } from 'antd';
+import { Layout, message } from 'antd';
 import { withRouter } from 'react-router-dom';
 import Auth from './../../common/Auth';
-import Api from '../../common/Api';
 
 import './Layout.scss';
 import I18n from "../../common/I18n";
