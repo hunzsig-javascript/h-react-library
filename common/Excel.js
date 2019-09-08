@@ -1,6 +1,6 @@
 import React from 'react';
-import JsExcelZip from 'js-excel-zip';
-import { message, Modal, Alert, Progress, Button, Upload } from 'antd';
+import KJsExcel from 'k-js-excel';
+import {message, Modal, Alert, Progress, Button, Upload} from 'antd';
 import Api from './Api';
 import ThisForm from '../components/DesktopForm';
 import I18n from "./I18n";
@@ -15,12 +15,12 @@ const styles = {
 };
 const Excel = {
   sheetLength: [
-    { value: 1, label: '1' },
-    { value: 20, label: '20' },
-    { value: 50, label: '50' },
-    { value: 100, label: '100' },
-    { value: 500, label: '500' },
-    { value: 1000, label: '1000' },
+    {value: 1, label: '1'},
+    {value: 20, label: '20'},
+    {value: 50, label: '50'},
+    {value: 100, label: '100'},
+    {value: 500, label: '500'},
+    {value: 1000, label: '1000'},
   ],
   pullLoop: (scope, params, set, percent, result) => {
     result = result || [];
@@ -40,7 +40,7 @@ const Excel = {
               percent(res.data.page.current / res.data.page.end);
             }
           } else {
-            const toExcel = new JsExcelZip();
+            const toExcel = new KJsExcel();
             toExcel.excelZip(result, res.data.page, set);
             if (typeof percent === 'function') {
               percent(100);
@@ -56,7 +56,7 @@ const Excel = {
   },
   pushLoop: (element, set, then) => {
     console.log(set);
-    const pullExcel = new JsExcelZip();
+    const pullExcel = new KJsExcel();
     pullExcel.excelPull(element, set, then);
   },
   pull: (opts) => {
@@ -82,7 +82,7 @@ const Excel = {
       className: 'vertical-center-modal hideFooter',
       content: (
         <div>
-          <Alert message={opts.tips} type="warning" showIcon={false} banner />
+          <Alert message={opts.tips} type="warning" showIcon={false} banner/>
           <ThisForm form={{
             refresh: true,
             onRef: (form) => {
@@ -123,7 +123,7 @@ const Excel = {
                 title: I18n.translate('waitAMoment'),
                 className: 'vertical-center-modal',
                 content: (
-                  <Progress id={id} percent={0} status="active" />
+                  <Progress id={id} percent={0} status="active"/>
                 ),
               });
               console.log(value);
@@ -179,7 +179,7 @@ const Excel = {
                 <p>{opts.text}</p>
                 {
                   opts.downloadText &&
-                  <a style={{ marginRight: '2rem' }} href={opts.downloadText} download={I18n.translate('guideBook')}>
+                  <a style={{marginRight: '2rem'}} href={opts.downloadText} download={I18n.translate('guideBook')}>
                     {I18n.translate('excelDownloadGuideBook')}
                   </a>
                 }
@@ -202,7 +202,7 @@ const Excel = {
             beforeUpload={beforeUpload}
             multiple
           >
-            <Button type="primary" style={{ margin: "1rem 0 10px" }}>{I18n.translate('uploadFile')}</Button>
+            <Button type="primary" style={{margin: "1rem 0 10px"}}>{I18n.translate('uploadFile')}</Button>
           </Upload>
         </div>
       ),
