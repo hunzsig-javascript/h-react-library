@@ -96,33 +96,6 @@ class hLayout extends Component {
         message.error(resUser.response);
       }
     });
-    /*Api.real('WisdomWindow.WarnNotice.getList', { is_read: -1 }, (resWarn) => {
-      if (resWarn.code === 200) {
-        if(resWarn.data.length > 0) {
-          const close = () => {
-            console.log(
-              'Notification was closed. Either the close button was clicked or duration time elapsed.',
-            );
-          };
-          const key = `open${Date.now()}`;
-          const btn = (
-            <Button type="primary" size="small" onClick={() => {this.props.history.replace('/window/timecard/warn'); }}>
-              查看
-            </Button>
-          );
-          notification.open({
-            message: '预警通知',
-            description:
-              '目前有' + resWarn.data.length + '未读消息',
-            btn,
-            key,
-            onClose: close,
-          });
-        }
-      } else {
-        message.error(resWarn.response);
-      }
-    });*/
   }
 
   getPermissionPath = (userPermission, permission, path = [], prevKey = []) => {
