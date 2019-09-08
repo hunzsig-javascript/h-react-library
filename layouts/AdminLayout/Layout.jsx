@@ -20,7 +20,7 @@ class hLayout extends Component {
 
   constructor(props) {
     super(props);
-    // todo 对应主题相关修正
+    // 对应主题相关修正
     this.theme = {
       pathHideType: this.props.h.pathHideType || 'disabled',
       singleMenu: (typeof this.props.h.singleMenu === 'boolean') ? this.props.h.singleMenu : false,
@@ -60,7 +60,7 @@ class hLayout extends Component {
 
   componentDidMount() {
     console.log(this.children);
-    Api.cache('User.Info.getInfo', { uid: Auth.getUid(), withThis: true }, (resUser) => {
+    Api.connect().cache('getUserInfo', { uid: Auth.getUid(), withThis: true }, (resUser) => {
       if (resUser.code === 200) {
         this.setState({
           userInfo: resUser.data,
