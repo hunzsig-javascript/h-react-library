@@ -60,7 +60,7 @@ class hLayout extends Component {
 
   componentDidMount() {
     console.log(this.children);
-    Api.connect().cache('getUserInfo', { uid: Auth.getUid(), withThis: true }, (resUser) => {
+    Api.connect().cache('getUserInfo', { uid: Auth.getUid() }, (resUser) => {
       if (resUser.code === 200) {
         this.setState({
           userInfo: resUser.data,

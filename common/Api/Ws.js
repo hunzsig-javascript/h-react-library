@@ -181,7 +181,7 @@ const Ws = {
     };
     refresh = typeof refresh === 'boolean' ? refresh : false;
     conf.refresh = refresh;
-    params.authUid = Auth.getUid();
+    params.auth_uid = Auth.getUid();
     const apiStack = scope + Parse.jsonEncode(params);
     if (refresh === false && apiStack.length < Ws.CacheKeyLimit && ApiLoad(apiStack) !== null) {
       then(ApiLoad(apiStack));
@@ -210,10 +210,10 @@ const Ws = {
     refresh = typeof refresh === 'boolean' ? refresh : false;
     if (Array.isArray(params)) {
       params.forEach((p) => {
-        p.authUid = Auth.getUid();
+        p.auth_uid = Auth.getUid();
       });
     } else {
-      params.authUid = Auth.getUid();
+      params.auth_uid = Auth.getUid();
     }
     let resultQty = 0;
     // todo

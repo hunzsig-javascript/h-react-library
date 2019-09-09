@@ -24,7 +24,7 @@ export default class AppLayout extends Component {
   }
 
   componentDidMount() {
-    Api.cache('User.Info.getInfo', { uid: Auth.getUid(), withThis: true }, (resUser) => {
+    Api.cache('User.Info.getInfo', { uid: Auth.getUid() }, (resUser) => {
       if (resUser.code === 200) {
         // nothing
       } else {

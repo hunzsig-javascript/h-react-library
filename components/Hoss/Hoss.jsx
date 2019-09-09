@@ -85,7 +85,7 @@ export default class Hoss extends Component {
             post: JSON.stringify({
               scope: 'Assets.Hoss.upload',
               client_id: Auth.getClientId(),
-              authUid: Auth.getUid(),
+              auth_uid: Auth.getUid(),
             }),
           }}
           locale={{
@@ -113,7 +113,7 @@ export default class Hoss extends Component {
             post: JSON.stringify({
               scope: 'Assets.Hoss.upload',
               client_id: Auth.getClientId(),
-              authUid: Auth.getUid(),
+              auth_uid: Auth.getUid(),
             }),
           }}
           locale={{
@@ -156,7 +156,7 @@ export default class Hoss extends Component {
               post: JSON.stringify({
                 scope: 'Assets.Hoss.upload',
                 client_id: Auth.getClientId(),
-                authUid: Auth.getUid(),
+                auth_uid: Auth.getUid(),
               }),
             }}
             {...this.val.params}
@@ -222,7 +222,7 @@ export default class Hoss extends Component {
             post: JSON.stringify({
               scope: 'Assets.Hoss.upload',
               client_id: Auth.getClientId(),
-              authUid: Auth.getUid(),
+              auth_uid: Auth.getUid(),
             }),
           }}
           {...this.val.params}

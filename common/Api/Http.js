@@ -60,7 +60,7 @@ const Http = {
     const crypto = conf.crypto || null;
     const header = conf.header || {};
     refresh = typeof refresh === 'boolean' ? refresh : false;
-    params.authUid = Auth.getUid();
+    params.auth_uid = Auth.getUid();
     const key = scope + Parse.jsonEncode(params);
     if (refresh === false && key.length < Http.CacheKeyLimit && ApiLoad(key) !== null) {
       then(ApiLoad(key));
@@ -143,10 +143,10 @@ const Http = {
     refresh = typeof refresh === 'boolean' ? refresh : true;
     if (Array.isArray(params)) {
       params.forEach((p) => {
-        p.authUid = Auth.getUid();
+        p.auth_uid = Auth.getUid();
       });
     } else {
-      params.authUid = Auth.getUid();
+      params.auth_uid = Auth.getUid();
     }
     const realKey = [];
     const real = [];
