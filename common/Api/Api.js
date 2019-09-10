@@ -17,13 +17,15 @@ const Api = {
    * @param key 唯一key
    * @param host 链接
    * @param type 类型 http | ws
-   * @param crypto
+   * @param crypto 加密方式
+   * @param append 附加参数
    */
-  set: (key, host, type = 'HTTP', crypto = null) => {
+  set: (key, host, type = 'HTTP', crypto, append) => {
     Api.setting[key] = {
       host: host,
       type: type.toUpperCase(),
       crypto: crypto || null,
+      append: append || null,
     };
   },
 

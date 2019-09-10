@@ -13,6 +13,24 @@ const ApiConnect = function (setting) {
   this.type = setting.type;
   this.host = setting.host;
   this.crypto = setting.crypto;
+  this.append = setting.append;
+
+  /**
+   *
+   * @param params
+   */
+  this.appendParams = (params) => {
+    params.auth_uid = Auth.getUid();
+    if (this.append === null) {
+      return;
+    }
+    for (let key in this.append) {
+      if (typeof params[key] === "undefined") { // 可指定,不覆盖
+        params[key] = this.append[key];
+      }
+    }
+    return params;
+  };
 
   /**
    * 有缓存
@@ -21,6 +39,7 @@ const ApiConnect = function (setting) {
    * @param then
    */
   this.cache = (scope, params, then) => {
+    params = this.appendParams(params);
     switch (this.type) {
       case 'HTTP':
         Http.PathLogin = Auth.getLoginPath();
@@ -77,6 +96,7 @@ const ApiConnect = function (setting) {
         break;
     }
   };
+
   /**
    * 无缓存
    * @param scope
@@ -84,6 +104,7 @@ const ApiConnect = function (setting) {
    * @param then
    */
   this.real = (scope, params, then) => {
+    params = this.appendParams(params);
     switch (this.type) {
       case 'HTTP':
         Http.PathLogin = Auth.getLoginPath();
