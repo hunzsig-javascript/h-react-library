@@ -185,6 +185,8 @@ export default class DesktopForm extends Component {
   };
 
   validateAllFormField = () => {
+    console.log(this.state.items);
+    return;
     this.refs.form.validateAll((errors, values) => {
       if (errors === null || errors === undefined) {
         let v = JSON.parse(JSON.stringify(values));
@@ -499,7 +501,7 @@ export default class DesktopForm extends Component {
       case 'const':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -514,7 +516,7 @@ export default class DesktopForm extends Component {
       case 'search':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -563,7 +565,7 @@ export default class DesktopForm extends Component {
       case 'searchText':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -608,7 +610,7 @@ export default class DesktopForm extends Component {
       case 'textarea':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -639,7 +641,7 @@ export default class DesktopForm extends Component {
       case 'net':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -688,7 +690,7 @@ export default class DesktopForm extends Component {
       case 'email':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -720,7 +722,7 @@ export default class DesktopForm extends Component {
       case 'hex':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -746,7 +748,7 @@ export default class DesktopForm extends Component {
       case 'pwd':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -777,7 +779,7 @@ export default class DesktopForm extends Component {
       case 'number':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -807,7 +809,7 @@ export default class DesktopForm extends Component {
       case 'integer':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -836,7 +838,7 @@ export default class DesktopForm extends Component {
       case 'switch':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -859,7 +861,7 @@ export default class DesktopForm extends Component {
       case 'radio':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -886,7 +888,7 @@ export default class DesktopForm extends Component {
       case 'checkbox':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -909,7 +911,7 @@ export default class DesktopForm extends Component {
       case 'checkboxCol':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -957,7 +959,7 @@ export default class DesktopForm extends Component {
       case 'rating':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -979,7 +981,7 @@ export default class DesktopForm extends Component {
       case 'select':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -1017,7 +1019,7 @@ export default class DesktopForm extends Component {
       case 'cascader':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -1049,7 +1051,7 @@ export default class DesktopForm extends Component {
       case 'region':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -1084,7 +1086,7 @@ export default class DesktopForm extends Component {
       case 'provincial':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -1119,7 +1121,7 @@ export default class DesktopForm extends Component {
       case 'municipal':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -1154,7 +1156,7 @@ export default class DesktopForm extends Component {
       case 'range':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -1177,7 +1179,7 @@ export default class DesktopForm extends Component {
       case 'datetime':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -1205,7 +1207,7 @@ export default class DesktopForm extends Component {
       case 'date':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -1232,7 +1234,7 @@ export default class DesktopForm extends Component {
       case 'time':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -1259,7 +1261,7 @@ export default class DesktopForm extends Component {
       case 'year':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -1286,7 +1288,7 @@ export default class DesktopForm extends Component {
       case 'month':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -1313,7 +1315,7 @@ export default class DesktopForm extends Component {
       case 'rangeDatetime':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -1346,7 +1348,7 @@ export default class DesktopForm extends Component {
       case 'rangeDate':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -1381,7 +1383,7 @@ export default class DesktopForm extends Component {
       case 'uploadHossDrag':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -1410,7 +1412,7 @@ export default class DesktopForm extends Component {
       case 'uploadAliossDrag':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon} />}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -1445,7 +1447,7 @@ export default class DesktopForm extends Component {
         }
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -1482,7 +1484,7 @@ export default class DesktopForm extends Component {
       case 'treeSelect':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -1528,7 +1530,7 @@ export default class DesktopForm extends Component {
       case 'richQuill':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -1572,7 +1574,7 @@ export default class DesktopForm extends Component {
       default:
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row wrap>
+            <Row>
               <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
                 {val.icon && <Icon className="myIcon" type={val.icon}/>}
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
@@ -1609,7 +1611,7 @@ export default class DesktopForm extends Component {
               return (
                 <div style={styles.formContent} key={idx}>
                   {item.title && <h2 style={styles.formTitle}>{item.title}</h2>}
-                  <Row wrap>
+                  <Row>
                     {
                       item.values.map((value, iidx) => {
                         return this.renderFormItem(item.col, value, iidx);
@@ -1623,7 +1625,7 @@ export default class DesktopForm extends Component {
         </div>
         {
           this.state.globalError.length > 0 &&
-          <Row wrap style={styles.formItem}>
+          <Row style={styles.formItem}>
             <Col {...defaultCol[this.state.items[0].col || 0].label} className="myFormLabel">&nbsp;</Col>
             <Col {...defaultCol[this.state.items[0].col || 0].item}>
               <Alert
@@ -1640,7 +1642,7 @@ export default class DesktopForm extends Component {
         }
         {
           this.state.operation !== undefined && this.state.operation.length > 0 &&
-          <Row wrap>
+          <Row>
             <Col {...defaultCol[this.state.items[0].col || 0].label} className="myFormLabel">&nbsp;</Col>
             <Col {...defaultCol[this.state.items[0].col || 0].item} style={{textAlign: this.state.align}}>
               {
