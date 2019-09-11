@@ -1,16 +1,14 @@
-import React, { Component } from 'react';
-import { List } from 'immutable';
-import { Upload } from '@icedesign/base';
-import { FormBinder as IceFormBinder } from '@icedesign/form-binder';
-import { message, Button, Icon } from 'antd';
+import React, {Component} from 'react';
+import {List} from 'immutable';
+import {Upload, message, Button, Icon} from 'antd';
 import Auth from '../../common/Auth';
 
 import './Hoss.scss';
 import I18n from "../../common/I18n";
 
-const { ImageUpload } = Upload;
-const { CropUpload } = Upload;
-const { DragUpload } = Upload;
+const {ImageUpload} = Upload;
+const {CropUpload} = Upload;
+const {DragUpload} = Upload;
 
 // HOSS上传固定http方式，ws无效
 
@@ -29,7 +27,8 @@ export default class Hoss extends Component {
     this.max = this.val.params && this.val.params.max || 99;
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+  }
 
   uploadFormatter = (res) => {
     const result = {};
@@ -69,88 +68,45 @@ export default class Hoss extends Component {
   renderUpload = (type) => {
     let tpl = null;
     switch (type) {
-    case 'uploadHossImage':
-      tpl = (
-        <ImageUpload
-          action="/api/http"
-          className={`fromItemWidth${this.col} ${this.val.type}`}
-          listType="picture-card"
-          defaultFileList={this.state.defaultFileList.toJS()}
-          formatter={this.uploadFormatter}
-          beforeUpload={this.beforeUpload}
-          onSuccess={this.onUploadSuccess}
-          onError={this.onUploadError}
-          accept="image/png, image/jpg, image/jpeg, image/gif, image/bmp"
-          data={{
-            post: JSON.stringify({
-              scope: 'Assets.Hoss.upload',
-              client_id: Auth.getClientId(),
-              auth_uid: Auth.getUid(),
-            }),
-          }}
-          locale={{
-            image: {
-              cancel: I18n.tr('uploadCancel'),
-              addPhoto: I18n.tr('upload') + this.val.name,
-            },
-          }}
-          {...this.val.params}
-        />
-      );
-      break;
-    case 'uploadHossDrag':
-      tpl = (
-        <DragUpload
-          action="/api/http"
-          className={`fromItemWidth${this.col} ${this.val.type}`}
-          listType="picture-card"
-          defaultFileList={this.state.defaultFileList.toJS()}
-          formatter={this.uploadFormatter}
-          beforeUpload={this.beforeUpload}
-          onSuccess={this.onUploadSuccess}
-          onError={this.onUploadError}
-          data={{
-            post: JSON.stringify({
-              scope: 'Assets.Hoss.upload',
-              client_id: Auth.getClientId(),
-              auth_uid: Auth.getUid(),
-            }),
-          }}
-          locale={{
-            image: {
-              cancel: I18n.tr('uploadCancel'),
-              addPhoto: I18n.tr('upload') + this.val.name,
-            },
-          }}
-          {...this.val.params}
-        />
-      );
-      break;
-    case 'uploadHossCrop':
-      tpl = (
-        <div>
-          <CropUpload
+      case 'uploadHossImage':
+        tpl = (
+          <ImageUpload
             action="/api/http"
             className={`fromItemWidth${this.col} ${this.val.type}`}
+            listType="picture-card"
+            defaultFileList={this.state.defaultFileList.toJS()}
             formatter={this.uploadFormatter}
-            beforeCrop={this.beforeUpload}
-            onSuccess={(res) => {
-              this.onUploadSuccess();
-              this.state.defaultFileList = this.state.defaultFileList.push({
-                name: res.name,
-                ext: res.ext,
-                type: res.contentType,
-                size: res.size,
-                downloadURL: res.downloadURL,
-                imgURL: res.imgURL,
-              });
-              this.setState({
-                defaultFileList: this.state.defaultFileList,
-              });
-              if (typeof this.props.setValue === 'function') {
-                this.props.setValue(this.state.defaultFileList.toJS());
-              }
+            beforeUpload={this.beforeUpload}
+            onSuccess={this.onUploadSuccess}
+            onError={this.onUploadError}
+            accept="image/png, image/jpg, image/jpeg, image/gif, image/bmp"
+            data={{
+              post: JSON.stringify({
+                scope: 'Assets.Hoss.upload',
+                client_id: Auth.getClientId(),
+                auth_uid: Auth.getUid(),
+              }),
             }}
+            locale={{
+              image: {
+                cancel: I18n.tr('uploadCancel'),
+                addPhoto: I18n.tr('upload') + this.val.name,
+              },
+            }}
+            {...this.val.params}
+          />
+        );
+        break;
+      case 'uploadHossDrag':
+        tpl = (
+          <DragUpload
+            action="/api/http"
+            className={`fromItemWidth${this.col} ${this.val.type}`}
+            listType="picture-card"
+            defaultFileList={this.state.defaultFileList.toJS()}
+            formatter={this.uploadFormatter}
+            beforeUpload={this.beforeUpload}
+            onSuccess={this.onUploadSuccess}
             onError={this.onUploadError}
             data={{
               post: JSON.stringify({
@@ -159,27 +115,71 @@ export default class Hoss extends Component {
                 auth_uid: Auth.getUid(),
               }),
             }}
+            locale={{
+              image: {
+                cancel: I18n.tr('uploadCancel'),
+                addPhoto: I18n.tr('upload') + this.val.name,
+              },
+            }}
             {...this.val.params}
-          >
-            <Button type="primary" size="small" style={{ margin: '0 0 10px' }}>
-              <Icon type="scissor" />
-              {I18n.tr('upload')}
-              {this.val.name}
-            </Button>
-          </CropUpload>
-          <div ref="cropViewer" style={{ margin: "5px 0 10px 0" }}>
-            {
-              this.state.defaultFileList.map((df, dfidx) => {
-                return (
-                  <div key={dfidx} className="next-upload-list next-upload-list-picture-card">
-                    <div className="next-upload-list-item next-upload-list-item-done">
-                      <div className="next-upload-list-item-info">
-                        <div className="next-upload-list-item-thumbnail">
-                          <div style={{ backgroundImage: `url(${df.imgURL})`, backgroundSize: '100%' }} />
-                        </div>
-                        <span className="next-upload-list-item-name">{df.name}</span>
-                        <span className="next-upload-tool ">
-                          <a className="pointer" href={df.downloadURL} target="_blank"><i className="next-icon next-icon-download next-icon-medium next-upload-tool-download-icon" /></a>
+          />
+        );
+        break;
+      case 'uploadHossCrop':
+        tpl = (
+          <div>
+            <CropUpload
+              action="/api/http"
+              className={`fromItemWidth${this.col} ${this.val.type}`}
+              formatter={this.uploadFormatter}
+              beforeCrop={this.beforeUpload}
+              onSuccess={(res) => {
+                this.onUploadSuccess();
+                this.state.defaultFileList = this.state.defaultFileList.push({
+                  name: res.name,
+                  ext: res.ext,
+                  type: res.contentType,
+                  size: res.size,
+                  downloadURL: res.downloadURL,
+                  imgURL: res.imgURL,
+                });
+                this.setState({
+                  defaultFileList: this.state.defaultFileList,
+                });
+                if (typeof this.props.setValue === 'function') {
+                  this.props.setValue(this.state.defaultFileList.toJS());
+                }
+              }}
+              onError={this.onUploadError}
+              data={{
+                post: JSON.stringify({
+                  scope: 'Assets.Hoss.upload',
+                  client_id: Auth.getClientId(),
+                  auth_uid: Auth.getUid(),
+                }),
+              }}
+              {...this.val.params}
+            >
+              <Button type="primary" size="small" style={{margin: '0 0 10px'}}>
+                <Icon type="scissor"/>
+                {I18n.tr('upload')}
+                {this.val.name}
+              </Button>
+            </CropUpload>
+            <div ref="cropViewer" style={{margin: "5px 0 10px 0"}}>
+              {
+                this.state.defaultFileList.map((df, dfidx) => {
+                  return (
+                    <div key={dfidx} className="next-upload-list next-upload-list-picture-card">
+                      <div className="next-upload-list-item next-upload-list-item-done">
+                        <div className="next-upload-list-item-info">
+                          <div className="next-upload-list-item-thumbnail">
+                            <div style={{backgroundImage: `url(${df.imgURL})`, backgroundSize: '100%'}}/>
+                          </div>
+                          <span className="next-upload-list-item-name">{df.name}</span>
+                          <span className="next-upload-tool ">
+                          <a className="pointer" href={df.downloadURL} target="_blank"><i
+                            className="next-icon next-icon-download next-icon-medium next-upload-tool-download-icon"/></a>
                           <a
                             className="pointer"
                             onClick={() => {
@@ -192,49 +192,49 @@ export default class Hoss extends Component {
                               }
                             }}
                           >
-                            <i className="next-icon next-icon-ashbin next-icon-medium" />
+                            <i className="next-icon next-icon-ashbin next-icon-medium"/>
                           </a>
                         </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })
-            }
+                  );
+                })
+              }
+            </div>
           </div>
-        </div>
-      );
-      break;
-    case 'uploadHoss':
-    default:
-      tpl = (
-        <Upload
-          directory
-          action="/api/http"
-          className={`fromItemWidth${this.col} ${this.val.type}`}
-          listType={(this.val.params && this.val.params.listType) ? this.val.params.listType : 'text'}
-          defaultFileList={this.state.defaultFileList.toJS()}
-          formatter={this.uploadFormatter}
-          beforeUpload={this.beforeUpload}
-          onSuccess={this.onUploadSuccess}
-          onError={this.onUploadError}
-          data={{
-            post: JSON.stringify({
-              scope: 'Assets.Hoss.upload',
-              client_id: Auth.getClientId(),
-              auth_uid: Auth.getUid(),
-            }),
-          }}
-          {...this.val.params}
-        >
-          <Button type="primary" size="small" style={{ margin: '0 0 10px' }}>
-            <Icon type="upload" />
-            {I18n.tr('upload')}
-            {this.val.name}
-          </Button>
-        </Upload>
-      );
-      break;
+        );
+        break;
+      case 'uploadHoss':
+      default:
+        tpl = (
+          <Upload
+            directory
+            action="/api/http"
+            className={`fromItemWidth${this.col} ${this.val.type}`}
+            listType={(this.val.params && this.val.params.listType) ? this.val.params.listType : 'text'}
+            defaultFileList={this.state.defaultFileList.toJS()}
+            formatter={this.uploadFormatter}
+            beforeUpload={this.beforeUpload}
+            onSuccess={this.onUploadSuccess}
+            onError={this.onUploadError}
+            data={{
+              post: JSON.stringify({
+                scope: 'Assets.Hoss.upload',
+                client_id: Auth.getClientId(),
+                auth_uid: Auth.getUid(),
+              }),
+            }}
+            {...this.val.params}
+          >
+            <Button type="primary" size="small" style={{margin: '0 0 10px'}}>
+              <Icon type="upload"/>
+              {I18n.tr('upload')}
+              {this.val.name}
+            </Button>
+          </Upload>
+        );
+        break;
     }
     return tpl;
   };

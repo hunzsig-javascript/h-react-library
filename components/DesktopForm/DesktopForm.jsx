@@ -29,6 +29,7 @@ import Api from '../../common/Api';
 
 import './DesktopForm.scss';
 import I18n from "../../common/I18n";
+import DesktopFormError from "./DesktopFormError";
 
 const provincialJson = require('./../../assets/json/provincial').default;
 const municipalJson = require('./../../assets/json/municipal').default;
@@ -86,7 +87,8 @@ export default class DesktopForm extends Component {
       valuesShadow: {},
       nodeShadow: {},
       loading: false,
-      error: '',
+      error: {},
+      globalError: '',
       renderNet: [],
       renderEmail: [],
     };
@@ -557,7 +559,7 @@ export default class DesktopForm extends Component {
                     addonAfter={this.renderSearchRemove(val)}
                   />
                 </div>
-                <div><IceFormError name={val.field}/></div>
+                <DesktopFormError message={this.state.error[val.field]}/>
               </Col>
             </Row>
           </Col>
@@ -1608,37 +1610,31 @@ export default class DesktopForm extends Component {
   render() {
     return (
       <div className="myform">
-        <IceFormBinderWrapper
-          value={this.state.values}
-          onChange={this.formChange}
-          ref="form"
-        >
-          <div>
-            {
-              this.state.items.map((item, idx) => {
-                return (
-                  <div style={styles.formContent} key={idx}>
-                    {item.title && <h2 style={styles.formTitle}>{item.title}</h2>}
-                    <Row wrap>
-                      {
-                        item.values.map((value, iidx) => {
-                          return this.renderFormItem(item.col, value, iidx);
-                        })
-                      }
-                    </Row>
-                  </div>
-                );
-              })
-            }
-          </div>
-        </IceFormBinderWrapper>
+        <div>
+          {
+            this.state.items.map((item, idx) => {
+              return (
+                <div style={styles.formContent} key={idx}>
+                  {item.title && <h2 style={styles.formTitle}>{item.title}</h2>}
+                  <Row wrap>
+                    {
+                      item.values.map((value, iidx) => {
+                        return this.renderFormItem(item.col, value, iidx);
+                      })
+                    }
+                  </Row>
+                </div>
+              );
+            })
+          }
+        </div>
         {
-          this.state.error.length > 0 &&
+          this.state.globalError.length > 0 &&
           <Row wrap style={styles.formItem}>
             <Col {...defaultCol[this.state.items[0].col || 0].label} className="myFormLabel">&nbsp;</Col>
             <Col {...defaultCol[this.state.items[0].col || 0].item}>
               <Alert
-                message={this.state.error}
+                message={this.state.globalError}
                 type="error"
                 closable
                 afterClose={() => {
