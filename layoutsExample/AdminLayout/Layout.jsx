@@ -36,7 +36,7 @@ class hLayout extends Component {
         break;
     }
     if (Auth.isOnline() === false) {
-      message.error(I18n.translate('loginOffline'), 3.00);
+      message.error(I18n.tr('loginOffline'), 3.00);
       this.props.history.replace(Auth.getLoginPath());
     }
     this.state = {
@@ -240,7 +240,7 @@ class hLayout extends Component {
       case 'loginOut':
         Api.real('User.Online.logout', { uid: Auth.getUid() }, (res) => {
           if (res.code === 200) {
-            message.success(I18n.translate('logoutSuccess'));
+            message.success(I18n.tr('logoutSuccess'));
             Auth.clearUid();
             this.props.history.replace(Auth.getLoginPath());
           } else {

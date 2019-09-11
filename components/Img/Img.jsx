@@ -23,7 +23,7 @@ class Img extends Component {
     return (
       <img
         src={Parse.img(this.props.src)}
-        alt={this.props.alt || I18n.translate('picture')}
+        alt={this.props.alt || I18n.tr('picture')}
         style={this.props.style}
         onClick={this.onClick}
       />

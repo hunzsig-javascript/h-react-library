@@ -14,7 +14,7 @@ export default class AppLayout extends Component {
     super(props);
     this.state = {};
     if (Auth.isOnline() === false) {
-      Toast.fail(I18n.translate('loginOffline'), 3.00);
+      Toast.fail(I18n.tr('loginOffline'), 3.00);
       if (window.location.hostname.indexOf('127.0.0.1') === 0 || window.location.hostname.indexOf('localhost') === 0) {
         this.props.history.replace('/sign/in');
       } else {

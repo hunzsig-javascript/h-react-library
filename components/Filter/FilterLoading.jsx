@@ -16,14 +16,14 @@ export default class HRouterLoading extends Component {
     if (this.props.error) {
       return (
         <div style={{ textAlign: 'center', width: '100%', height: '100px', lineHeight: '100px' }}>
-          <p>{I18n.translate('filterError')}</p>
+          <p>{I18n.tr('filterError')}</p>
           <p>{this.props.error}</p>
         </div>
       );
     } else if (this.props.pastDelay) {
       return (
         <div style={{ textAlign: 'center', width: '100%', height: '100px', lineHeight: '100px' }}>
-          <Spin tip={I18n.translate('rendering')} size="large" />
+          <Spin tip={I18n.tr('rendering')} size="large" />
         </div>
       );
     }

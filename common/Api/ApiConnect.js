@@ -92,7 +92,7 @@ const ApiConnect = function (setting) {
         });
         break;
       default:
-        console.error(I18n.translate('apiTypeError'));
+        console.error(I18n.tr('apiTypeError'));
         break;
     }
   };
@@ -157,7 +157,7 @@ const ApiConnect = function (setting) {
         });
         break;
       default:
-        console.error(I18n.translate('apiTypeError'));
+        console.error(I18n.tr('apiTypeError'));
         break;
     }
   };

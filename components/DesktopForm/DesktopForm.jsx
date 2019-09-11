@@ -133,7 +133,7 @@ export default class DesktopForm extends Component {
     if (!values) {
       callback();
     } else if (isNaN(values)) {
-      callback(I18n.translate('pleaseFillRightNum'));
+      callback(I18n.tr('pleaseFillRightNum'));
     } else {
       callback();
     }
@@ -143,9 +143,9 @@ export default class DesktopForm extends Component {
     if (!values) {
       callback();
     } else if (isNaN(values)) {
-      callback(I18n.translate('pleaseFillRightInt'));
+      callback(I18n.tr('pleaseFillRightInt'));
     } else if (!Number.isInteger(values)) {
-      callback(I18n.translate('pleaseFillRightInt'));
+      callback(I18n.tr('pleaseFillRightInt'));
     } else {
       callback();
     }
@@ -521,14 +521,14 @@ export default class DesktopForm extends Component {
                 <IceFormBinder
                   type={val.binderType || 'string'}
                   name={val.field}
-                  message={I18n.translate('pleaseInput') + val.name}
+                  message={I18n.tr('pleaseInput') + val.name}
                   valueFormatter={(result) => {
                     return this.binderValueFormatter(val, result);
                   }}
                 >
                   <Input
                     style={{position: 'absolute', left: 0, top: 0, bottom: 0, right: 0, opacity: 0}}
-                    placeholder={I18n.translate('pleaseInput') + val.name}
+                    placeholder={I18n.tr('pleaseInput') + val.name}
                     value={this.state.values[val.field]}
                     readOnly={true}
                     required={val.params && val.params.required ? val.params.required : false}
@@ -538,7 +538,7 @@ export default class DesktopForm extends Component {
                   <Input.Search
                     className={`fromItemWidth${c} ${val.type}`}
                     size={size}
-                    placeholder={(val.params && val.params.placeholder) ? val.params.placeholder : `${I18n.translate('pleaseChooseByClick')}${val.name}`}
+                    placeholder={(val.params && val.params.placeholder) ? val.params.placeholder : `${I18n.tr('pleaseChooseByClick')}${val.name}`}
                     defaultValue={this.state.values[val.field + '_shadow'] ? this.state.values[val.field + '_shadow'] : ''}
                     ref={node => this.state.nodeShadow[val.field] = node}
                     readOnly={true}
@@ -572,14 +572,14 @@ export default class DesktopForm extends Component {
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
               </Col>
               <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={val.field} message={I18n.translate('pleaseInputRight') + val.name}
+                <IceFormBinder name={val.field} message={I18n.tr('pleaseInputRight') + val.name}
                                valueFormatter={(result) => {
                                  return this.binderValueFormatter(val, result);
                                }}>
                   <Input.TextArea
                     className={`fromItemWidth${c} ${val.type}`}
                     size={size}
-                    placeholder={I18n.translate('pleaseInput') + val.name}
+                    placeholder={I18n.tr('pleaseInput') + val.name}
                     defaultValue={this.state.values[val.field]}
                     {...val.params}
                   />
@@ -617,14 +617,14 @@ export default class DesktopForm extends Component {
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
               </Col>
               <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={val.field} message={I18n.translate('pleaseInputRight') + val.name}
+                <IceFormBinder name={val.field} message={I18n.tr('pleaseInputRight') + val.name}
                                valueFormatter={(result) => {
                                  return this.binderValueFormatter(val, result);
                                }}>
                   <Input.TextArea
                     className={`fromItemWidth${c} ${val.type}`}
                     size={size}
-                    placeholder={I18n.translate('pleaseInput') + val.name}
+                    placeholder={I18n.tr('pleaseInput') + val.name}
                     defaultValue={this.state.values[val.field]}
                     ref={node => this.state.nodeShadow[val.field] = node}
                     {...val.params}
@@ -657,14 +657,14 @@ export default class DesktopForm extends Component {
                       this.formChange(this.state.values);
                     }}
                   >
-                    <Select.Option value="" disabled={true}>{I18n.translate('protocol')}</Select.Option>
+                    <Select.Option value="" disabled={true}>{I18n.tr('protocol')}</Select.Option>
                     <Select.Option value="http://">http://</Select.Option>
                     <Select.Option value="https://">https://</Select.Option>
                   </Select>
                   <IceFormBinder
                     type="url"
                     name={val.field}
-                    message={I18n.translate('URLFormat')}
+                    message={I18n.tr('URLFormat')}
                     valueFormatter={(result) => {
                       return this.binderValueFormatter(val, result);
                     }}
@@ -672,7 +672,7 @@ export default class DesktopForm extends Component {
                     <AutoComplete
                       style={{width: '80%'}}
                       size={size}
-                      placeholder={I18n.translate('pleaseInput') + val.name}
+                      placeholder={I18n.tr('pleaseInput') + val.name}
                       onChange={this.renderNet}
                       filterOption={false}
                       hasClear={true}
@@ -697,14 +697,14 @@ export default class DesktopForm extends Component {
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
               </Col>
               <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={val.field} type="email" message={I18n.translate('pleaseInputRight') + val.name}
+                <IceFormBinder name={val.field} type="email" message={I18n.tr('pleaseInputRight') + val.name}
                                valueFormatter={(result) => {
                                  return this.binderValueFormatter(val, result);
                                }}>
                   <AutoComplete
                     className={`fromItemWidth${c} ${val.type}`}
                     size={size}
-                    placeholder={I18n.translate('pleaseInput') + val.name}
+                    placeholder={I18n.tr('pleaseInput') + val.name}
                     onChange={this.renderEmail}
                     filterOption={false}
                     hasClear={true}
@@ -729,7 +729,7 @@ export default class DesktopForm extends Component {
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
               </Col>
               <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="hex" name={val.field} message={I18n.translate('pleaseInputRightCode')}
+                <IceFormBinder type="hex" name={val.field} message={I18n.tr('pleaseInputRightCode')}
                                valueFormatter={(result) => {
                                  return this.binderValueFormatter(val, result);
                                }}>
@@ -755,7 +755,7 @@ export default class DesktopForm extends Component {
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
               </Col>
               <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="string" name={val.field} message={I18n.translate('pleaseInput') + val.name}
+                <IceFormBinder type="string" name={val.field} message={I18n.tr('pleaseInput') + val.name}
                                valueFormatter={(result) => {
                                  return this.binderValueFormatter(val, result);
                                }}>
@@ -763,7 +763,7 @@ export default class DesktopForm extends Component {
                     className={`fromItemWidth${c} ${val.type}`}
                     type="password"
                     size={size}
-                    placeholder={I18n.translate('pleaseInput') + val.name}
+                    placeholder={I18n.tr('pleaseInput') + val.name}
                     allowClear={true}
                     ref={node => this.state.nodeShadow[val.field] = node}
                     defaultValue={this.state.values[val.field]}
@@ -792,7 +792,7 @@ export default class DesktopForm extends Component {
                   <Input
                     className={`fromItemWidth${c} ${val.type}`}
                     size={size}
-                    placeholder={I18n.translate('pleaseInput') + val.name}
+                    placeholder={I18n.tr('pleaseInput') + val.name}
                     allowClear={true}
                     ref={node => this.state.nodeShadow[val.field] = node}
                     defaultValue={this.state.values[val.field]}
@@ -822,7 +822,7 @@ export default class DesktopForm extends Component {
                   <Input
                     className={`fromItemWidth${c} ${val.type}`}
                     size={size}
-                    placeholder={I18n.translate('pleaseInput') + val.name}
+                    placeholder={I18n.tr('pleaseInput') + val.name}
                     allowClear={true}
                     ref={node => this.state.nodeShadow[val.field] = node}
                     defaultValue={this.state.values[val.field]}
@@ -845,7 +845,7 @@ export default class DesktopForm extends Component {
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
               </Col>
               <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={val.field} message={I18n.translate('pleaseChoose') + val.name}>
+                <IceFormBinder name={val.field} message={I18n.tr('pleaseChoose') + val.name}>
                   <Switch
                     className={`fromItemWidth${c} ${val.type}`}
                     size={size}
@@ -869,7 +869,7 @@ export default class DesktopForm extends Component {
               </Col>
               <Col {...defaultCol[c].item} style={styles.formItem}>
                 <IceFormBinder type={val.binderType || 'string'} name={val.field}
-                               message={I18n.translate('pleaseChoose') + val.name} valueFormatter={(e) => {
+                               message={I18n.tr('pleaseChoose') + val.name} valueFormatter={(e) => {
                   return this.binderValueFormatter(val, e);
                 }}>
                   <Radio.Group
@@ -895,7 +895,7 @@ export default class DesktopForm extends Component {
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
               </Col>
               <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="array" name={val.field} message={I18n.translate('pleaseChoose') + val.name}>
+                <IceFormBinder type="array" name={val.field} message={I18n.tr('pleaseChoose') + val.name}>
                   <Checkbox.Group
                     className={`fromItemWidth${c} ${val.type}`}
                     defaultValue={this.state.value}
@@ -918,7 +918,7 @@ export default class DesktopForm extends Component {
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
               </Col>
               <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="array" name={val.field} message={I18n.translate('pleaseChoose') + val.name}>
+                <IceFormBinder type="array" name={val.field} message={I18n.tr('pleaseChoose') + val.name}>
                   <Checkbox.Group
                     className={`fromItemWidth${c} ${val.type}`}
                     defaultValue={this.state.value || []}
@@ -989,13 +989,13 @@ export default class DesktopForm extends Component {
               </Col>
               <Col {...defaultCol[c].item} style={styles.formItem}>
                 <IceFormBinder type={val.binderType || 'string'} name={val.field}
-                               message={I18n.translate('pleaseChoose') + val.name}>
+                               message={I18n.tr('pleaseChoose') + val.name}>
                   <Select
                     allowClear={!required}
                     showSearch={showSearch}
                     className={`fromItemWidth${c} ${val.type}`}
                     size={size}
-                    placeholder={I18n.translate('pleaseChoose') + val.name}
+                    placeholder={I18n.tr('pleaseChoose') + val.name}
                     defaultValue={this.state.values[val.field]}
                     filterOption={(input, option) => {
                       if (option.props.disabled === true) return false;
@@ -1027,14 +1027,14 @@ export default class DesktopForm extends Component {
               </Col>
               <Col {...defaultCol[c].item} style={styles.formItem}>
                 <IceFormBinder type={val.binderType || 'array'} name={val.field}
-                               message={I18n.translate('pleaseChoose') + val.name} valueFormatter={(v1, v2) => {
+                               message={I18n.tr('pleaseChoose') + val.name} valueFormatter={(v1, v2) => {
                   return this.binderValueFormatter(val, v1, v2);
                 }}>
                   <Cascader
                     style={{textAlign: 'left'}}
                     className={`fromItemWidth${c} ${val.type}`}
                     size={size}
-                    placeholder={I18n.translate('pleaseChoose') + val.name}
+                    placeholder={I18n.tr('pleaseChoose') + val.name}
                     defaultValue={this.state.values[val.field]}
                     options={val.map}
                     showSearch={(inputValue, path) => {
@@ -1058,7 +1058,7 @@ export default class DesktopForm extends Component {
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
               </Col>
               <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="array" name={val.field} message={I18n.translate('pleaseChoose') + val.name}
+                <IceFormBinder type="array" name={val.field} message={I18n.tr('pleaseChoose') + val.name}
                                valueFormatter={(v1, v2) => {
                                  return this.binderValueFormatter(val, v1, v2);
                                }}>
@@ -1070,7 +1070,7 @@ export default class DesktopForm extends Component {
                       options={regionJson}
                       defaultValue={this.state.values[val.field]}
                       allowClear={true}
-                      placeholder={I18n.translate('pleaseChoose') + val.name}
+                      placeholder={I18n.tr('pleaseChoose') + val.name}
                       showSearch={(inputValue, path) => {
                         return (path.some(option => (option.label).toLowerCase().indexOf(inputValue.toLowerCase()) > -1));
                       }}
@@ -1093,7 +1093,7 @@ export default class DesktopForm extends Component {
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
               </Col>
               <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="array" name={val.field} message={I18n.translate('pleaseChoose') + val.name}
+                <IceFormBinder type="array" name={val.field} message={I18n.tr('pleaseChoose') + val.name}
                                valueFormatter={(v1, v2) => {
                                  return this.binderValueFormatter(val, v1, v2);
                                }}>
@@ -1105,7 +1105,7 @@ export default class DesktopForm extends Component {
                       options={provincialJson}
                       defaultValue={this.state.values[val.field]}
                       allowClear={true}
-                      placeholder={I18n.translate('pleaseChoose') + val.name}
+                      placeholder={I18n.tr('pleaseChoose') + val.name}
                       showSearch={(inputValue, path) => {
                         return (path.some(option => (option.label).toLowerCase().indexOf(inputValue.toLowerCase()) > -1));
                       }}
@@ -1128,7 +1128,7 @@ export default class DesktopForm extends Component {
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
               </Col>
               <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="array" name={val.field} message={I18n.translate('pleaseChoose') + val.name}
+                <IceFormBinder type="array" name={val.field} message={I18n.tr('pleaseChoose') + val.name}
                                valueFormatter={(v1, v2) => {
                                  return this.binderValueFormatter(val, v1, v2);
                                }}>
@@ -1140,7 +1140,7 @@ export default class DesktopForm extends Component {
                       options={municipalJson}
                       defaultValue={this.state.values[val.field]}
                       allowClear={true}
-                      placeholder={I18n.translate('pleaseChoose') + val.name}
+                      placeholder={I18n.tr('pleaseChoose') + val.name}
                       showSearch={(inputValue, path) => {
                         return (path.some(option => (option.label).toLowerCase().indexOf(inputValue.toLowerCase()) > -1));
                       }}
@@ -1164,7 +1164,7 @@ export default class DesktopForm extends Component {
               </Col>
               <Col {...defaultCol[c].item} style={styles.formItem}>
                 <IceFormBinder type="array" name={val.field}
-                               message={I18n.translate('pleaseChoose') + val.name + I18n.translate('range')}>
+                               message={I18n.tr('pleaseChoose') + val.name + I18n.tr('range')}>
                   <Range
                     className={`fromItemWidth${c} ${val.type}`}
                     size={size}
@@ -1186,7 +1186,7 @@ export default class DesktopForm extends Component {
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
               </Col>
               <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={val.field} message={I18n.translate('pleaseChoose') + val.name}
+                <IceFormBinder name={val.field} message={I18n.tr('pleaseChoose') + val.name}
                                valueFormatter={(date, dateStr) => {
                                  return this.binderValueFormatter(val, date, dateStr);
                                }}>
@@ -1214,7 +1214,7 @@ export default class DesktopForm extends Component {
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
               </Col>
               <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={val.field} message={I18n.translate('pleaseChoose') + val.name}
+                <IceFormBinder name={val.field} message={I18n.tr('pleaseChoose') + val.name}
                                valueFormatter={(date, dateStr) => {
                                  return this.binderValueFormatter(val, date, dateStr);
                                }}>
@@ -1241,7 +1241,7 @@ export default class DesktopForm extends Component {
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
               </Col>
               <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={val.field} message={I18n.translate('pleaseChoose') + val.name}
+                <IceFormBinder name={val.field} message={I18n.tr('pleaseChoose') + val.name}
                                valueFormatter={(date, dateStr) => {
                                  return this.binderValueFormatter(val, date, dateStr);
                                }}>
@@ -1268,7 +1268,7 @@ export default class DesktopForm extends Component {
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
               </Col>
               <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={val.field} message={I18n.translate('pleaseChoose') + val.name}
+                <IceFormBinder name={val.field} message={I18n.tr('pleaseChoose') + val.name}
                                valueFormatter={(date, dateStr) => {
                                  return this.binderValueFormatter(val, date, dateStr);
                                }}>
@@ -1295,7 +1295,7 @@ export default class DesktopForm extends Component {
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
               </Col>
               <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={val.field} message={I18n.translate('pleaseChoose') + val.name}
+                <IceFormBinder name={val.field} message={I18n.tr('pleaseChoose') + val.name}
                                valueFormatter={(date, dateStr) => {
                                  return this.binderValueFormatter(val, date, dateStr);
                                }}>
@@ -1325,7 +1325,7 @@ export default class DesktopForm extends Component {
                 <IceFormBinder
                   type="array"
                   name={val.field}
-                  message={I18n.translate('pleaseChoose') + val.name + I18n.translate('range')}
+                  message={I18n.tr('pleaseChoose') + val.name + I18n.tr('range')}
                   valueFormatter={(date, dateStr) => {
                     return this.binderValueFormatter(val, date, dateStr);
                   }}
@@ -1358,7 +1358,7 @@ export default class DesktopForm extends Component {
                 <IceFormBinder
                   type="array"
                   name={val.field}
-                  message={I18n.translate('pleaseChoose') + val.name + I18n.translate('range')}
+                  message={I18n.tr('pleaseChoose') + val.name + I18n.tr('range')}
                   valueFormatter={(date, dateStr) => {
                     return this.binderValueFormatter(val, date, dateStr);
                   }}
@@ -1435,7 +1435,7 @@ export default class DesktopForm extends Component {
         // 如果是tree，整个根
         map = [{
           value: TreeRoot,
-          label: I18n.translate('chooseAll'),
+          label: I18n.tr('chooseAll'),
           children: JSON.parse(JSON.stringify(map)),
         }];
         if (Array.isArray(val.value)) {
@@ -1491,7 +1491,7 @@ export default class DesktopForm extends Component {
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
               </Col>
               <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="array" name={val.field} message={I18n.translate('pleaseChoose') + val.name}>
+                <IceFormBinder type="array" name={val.field} message={I18n.tr('pleaseChoose') + val.name}>
                   <TreeSelect
                     showSearch
                     allowClear
@@ -1501,8 +1501,8 @@ export default class DesktopForm extends Component {
                     showCheckedStrategy={TreeSelect.SHOW_PARENT}
                     className={`fromItemWidth${c} ${val.type}`}
                     size={size}
-                    placeholder={I18n.translate('pleaseChoose') + val.name}
-                    searchPlaceholder={I18n.translate('pleaseChoose') + val.name}
+                    placeholder={I18n.tr('pleaseChoose') + val.name}
+                    searchPlaceholder={I18n.tr('pleaseChoose') + val.name}
                     multiple
                     defaultCheckedKeys={val.value || []}
                     onChange={(checkKeys) => {
@@ -1581,7 +1581,7 @@ export default class DesktopForm extends Component {
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
               </Col>
               <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="string" name={val.field} message={I18n.translate('pleaseInput') + val.name}
+                <IceFormBinder type="string" name={val.field} message={I18n.tr('pleaseInput') + val.name}
                                valueFormatter={(result) => {
                                  return this.binderValueFormatter(val, result);
                                }}>
@@ -1589,7 +1589,7 @@ export default class DesktopForm extends Component {
                     className={val.type ? `fromItemWidth${c} ${val.type}` : `fromItemWidth${c} str`}
                     size={size}
                     allowClear={true}
-                    placeholder={I18n.translate('pleaseInput') + val.name}
+                    placeholder={I18n.tr('pleaseInput') + val.name}
                     ref={node => this.state.nodeShadow[val.field] = node}
                     defaultValue={this.state.values[val.field]}
                     {...val.params}
@@ -1667,7 +1667,7 @@ export default class DesktopForm extends Component {
                           disabled={this.state.loading}
                           loading={this.state.loading}
                         >
-                          {op.label || I18n.translate('submit')}
+                          {op.label || I18n.tr('submit')}
                         </Button>
                       );
                       break;
@@ -1681,7 +1681,7 @@ export default class DesktopForm extends Component {
                           disabled={this.state.loading}
                           loading={this.state.loading}
                         >
-                          {op.label || I18n.translate('reset')}
+                          {op.label || I18n.tr('reset')}
                         </Button>
                       );
                       break;
@@ -1695,7 +1695,7 @@ export default class DesktopForm extends Component {
                           loading={this.state.loading}
                           {...op.params}
                         >
-                          {op.label || I18n.translate('trigger')}
+                          {op.label || I18n.tr('trigger')}
                         </Button>
                       );
                       break;

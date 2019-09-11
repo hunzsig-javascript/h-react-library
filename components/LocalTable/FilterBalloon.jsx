@@ -118,7 +118,7 @@ export default class FilterBalloon extends Component {
             size="small"
             onClick={this.cancel.bind(this)}
           >
-            {I18n.translate('cancel')}
+            {I18n.tr('cancel')}
           </Button>
         </div>
       </Balloon>

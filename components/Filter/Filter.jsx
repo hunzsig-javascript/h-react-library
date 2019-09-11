@@ -25,7 +25,7 @@ export default class Filter extends Component {
     if (!values) {
       callback();
     } else if (isNaN(values)) {
-      callback(I18n.translate('fillNum'));
+      callback(I18n.tr('fillNum'));
     } else {
       callback();
     }
@@ -35,9 +35,9 @@ export default class Filter extends Component {
     if (!values) {
       callback();
     } else if (isNaN(values)) {
-      callback(I18n.translate('fillNum'));
+      callback(I18n.tr('fillNum'));
     } else if (!Number.isInteger(values)) {
-      callback(I18n.translate('fillInt'));
+      callback(I18n.tr('fillInt'));
     } else {
       callback();
     }
@@ -138,7 +138,7 @@ export default class Filter extends Component {
               <Input.TextArea
                 size={size}
                 style={styles.filterTool[1]}
-                placeholder={I18n.translate('pleaseInput') + val.name}
+                placeholder={I18n.tr('pleaseInput') + val.name}
                 value={this.props.value[val.field]}
                 ref={node => this.state.nodeShadow[val.field] = node}
                 {...val.params}
@@ -186,7 +186,7 @@ export default class Filter extends Component {
             <Input
               size={size}
               style={styles.filterTool[1]}
-              placeholder={I18n.translate('pleaseInput') + val.name}
+              placeholder={I18n.tr('pleaseInput') + val.name}
               allowClear={true}
               ref={node => this.state.nodeShadow[val.field] = node}
               defaultValue={this.props.value[val.field]}
@@ -228,7 +228,7 @@ export default class Filter extends Component {
             <Input
               size={size}
               style={styles.filterTool[1]}
-              placeholder={I18n.translate('pleaseInput') + val.name}
+              placeholder={I18n.tr('pleaseInput') + val.name}
               allowClear={true}
               ref={node => this.state.nodeShadow[val.field] = node}
               defaultValue={this.props.value[val.field]}
@@ -249,7 +249,7 @@ export default class Filter extends Component {
               showSearch={showSearch}
               size={size}
               style={styles.filterTool[1]}
-              placeholder={I18n.translate('pleaseChoose') + val.name}
+              placeholder={I18n.tr('pleaseChoose') + val.name}
               value={this.props.value[val.field] || (isSelectMulti ? [] : '')}
               filterOption={(input, option) => {
                 if (option.props.disabled === true) return false;
@@ -276,7 +276,7 @@ export default class Filter extends Component {
             <Cascader
               style={styles.filterTool[1]}
               size={size}
-              placeholder={I18n.translate('pleaseChoose') + val.name}
+              placeholder={I18n.tr('pleaseChoose') + val.name}
               defaultValue={this.props.value[val.field]}
               options={val.map}
               showSearch={(inputValue, path) => {
@@ -432,8 +432,8 @@ export default class Filter extends Component {
               treeCheckable={true}
               showCheckedStrategy={TreeSelect.SHOW_PARENT}
               size={sizeAntd}
-              placeholder={I18n.translate('selectable') + val.name}
-              searchPlaceholder={I18n.translate('selectable') + val.name}
+              placeholder={I18n.tr('selectable') + val.name}
+              searchPlaceholder={I18n.tr('selectable') + val.name}
               multiple
               defaultCheckedKeys={this.props.value[val.field]}
             >
@@ -454,7 +454,7 @@ export default class Filter extends Component {
               onPressEnter={this.props.onSubmit}
               size={size}
               style={styles.filterTool[1]}
-              placeholder={I18n.translate('pleaseInput') + val.name}
+              placeholder={I18n.tr('pleaseInput') + val.name}
               allowClear={true}
               ref={node => this.state.nodeShadow[val.field] = node}
               defaultValue={this.props.value[val.field]}
@@ -488,7 +488,7 @@ export default class Filter extends Component {
                 size="small"
                 type="default"
               >
-                {I18n.translate('reset')}
+                {I18n.tr('reset')}
               </Button>
               <Button
                 onClick={this.props.onSubmit}
@@ -498,7 +498,7 @@ export default class Filter extends Component {
                 loading={this.props.loading}
                 disabled={this.props.loading}
               >
-                {I18n.translate('search')}
+                {I18n.tr('search')}
               </Button>
             </div>
           </div>

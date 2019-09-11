@@ -46,7 +46,7 @@ const Socket = {
       console.log('connection');
       console.log((new Date()).getMinutes() + ':' + (new Date()).getSeconds());
       message.destroy();
-      message.info(I18n.translate('connectServerSuccess'));
+      message.info(I18n.tr('connectServerSuccess'));
       if (Socket.queue.length > 0) {
         let q = Socket.queue.shift();
         while (q !== undefined) {
@@ -59,14 +59,14 @@ const Socket = {
       const result = Crypto.is(conf.crypto) ? Crypto.decode(msg.data, conf.crypto) : Parse.jsonDecode(msg.data);
       let stack = result.stack || null;
       if (stack === null) {
-        message.error(I18n.translate('stackError'));
+        message.error(I18n.tr('stackError'));
         return;
       }
       stack = stack.split('#STACK#');
       const stackIndex = stack[0];
       const stackKey = stack[1];
       if (typeof Socket.stack[stackIndex].then !== 'function') {
-        message.error(I18n.translate('stackThenError'));
+        message.error(I18n.tr('stackThenError'));
         return;
       }
       Socket.stack[stackIndex].apis[stackKey] = result;
@@ -87,7 +87,7 @@ const Socket = {
                 ApiSave(key, res);
               }
             } else {
-              response.push({ code: 500, response: I18n.translate('apiError'), data: null });
+              response.push({ code: 500, response: I18n.tr('apiError'), data: null });
             }
           }
         });
@@ -98,7 +98,7 @@ const Socket = {
               location.href = Ws.PathLogin;
             });
           } else {
-            message.warning(I18n.translate('operationNotPermission'));
+            message.warning(I18n.tr('operationNotPermission'));
           }
         } else {
           const then = Socket.stack[stackIndex].then;
@@ -127,17 +127,17 @@ const Socket = {
       if (ApiSocket[host].readyState === Socket.state.OPEN) {
         ApiSocket[host].send(Crypto.encode(params, conf.crypto));
       } else if (ApiSocket[host].readyState === Socket.state.CONNECTING) {
-        message.loading(I18n.translate('connectServerTrying'));
+        message.loading(I18n.tr('connectServerTrying'));
         Socket.queue.push(params);
       } else if (ApiSocket[host].readyState === Socket.state.CLOSING) {
-        message.warning(I18n.translate('connectServerClosing'));
+        message.warning(I18n.tr('connectServerClosing'));
         Socket.queue.push(params);
       } else if (ApiSocket[host].readyState === Socket.state.CLOSED) {
-        message.error(I18n.translate('connectServerClosed'));
+        message.error(I18n.tr('connectServerClosed'));
         Socket.queue.push(params);
       }
     } else {
-      message.error(I18n.translate('connectServerCouldNotAccess'));
+      message.error(I18n.tr('connectServerCouldNotAccess'));
       Socket.queue.push(params);
     }
   },
@@ -154,15 +154,15 @@ const Socket = {
 const Ws = {
   CacheKeyLimit: 3000,
   PathLogin: null,
-  TipsLogin: I18n.translate('loginTimeout'),
-  Tips403: I18n.translate('loginTimeoutOrNotPermission'),
+  TipsLogin: I18n.tr('loginTimeout'),
+  Tips403: I18n.tr('loginTimeoutOrNotPermission'),
   cache: (conf) => {
     if (Array.isArray(conf.scope)) {
       Ws.runAll(conf, false);
     } else if (typeof conf.scope === 'string') {
       Ws.run(conf, false);
     } else {
-      message.error(I18n.translate('scopeError'));
+      message.error(I18n.tr('scopeError'));
     }
   },
   real: (conf) => {
@@ -171,7 +171,7 @@ const Ws = {
     } else if (typeof conf.scope === 'string') {
       Ws.run(conf, true);
     } else {
-      message.error(I18n.translate('scopeError'));
+      message.error(I18n.tr('scopeError'));
     }
   },
   run: (conf, refresh) => {

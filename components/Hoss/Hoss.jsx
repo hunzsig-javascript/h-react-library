@@ -12,7 +12,7 @@ const { ImageUpload } = Upload;
 const { CropUpload } = Upload;
 const { DragUpload } = Upload;
 
-// TODO HOSS上传固定http方式，ws无效
+// HOSS上传固定http方式，ws无效
 
 export default class Hoss extends Component {
   static defaultProps = {};
@@ -53,17 +53,17 @@ export default class Hoss extends Component {
 
   beforeUpload = () => {
     if (this.state.defaultFileList.size >= this.max) {
-      message.warning(I18n.translate('uploadOnlyAllow') + this.max + I18n.translate('files'));
+      message.warning(I18n.tr('uploadOnlyAllow') + this.max + I18n.tr('files'));
       return false;
     }
     return true;
   };
 
   onUploadSuccess = () => {
-    message.success(I18n.translate('uploadSuccess'));
+    message.success(I18n.tr('uploadSuccess'));
   };
   onUploadError = (res) => {
-    message.error(I18n.translate('uploadFail') + I18n.translate(':') + (res.response.error || ''));
+    message.error(I18n.tr('uploadFail') + I18n.tr(':') + (res.response.error || ''));
   };
 
   renderUpload = (type) => {
@@ -90,8 +90,8 @@ export default class Hoss extends Component {
           }}
           locale={{
             image: {
-              cancel: I18n.translate('uploadCancel'),
-              addPhoto: I18n.translate('upload') + this.val.name,
+              cancel: I18n.tr('uploadCancel'),
+              addPhoto: I18n.tr('upload') + this.val.name,
             },
           }}
           {...this.val.params}
@@ -118,8 +118,8 @@ export default class Hoss extends Component {
           }}
           locale={{
             image: {
-              cancel: I18n.translate('uploadCancel'),
-              addPhoto: I18n.translate('upload') + this.val.name,
+              cancel: I18n.tr('uploadCancel'),
+              addPhoto: I18n.tr('upload') + this.val.name,
             },
           }}
           {...this.val.params}
@@ -163,7 +163,7 @@ export default class Hoss extends Component {
           >
             <Button type="primary" size="small" style={{ margin: '0 0 10px' }}>
               <Icon type="scissor" />
-              {I18n.translate('upload')}
+              {I18n.tr('upload')}
               {this.val.name}
             </Button>
           </CropUpload>
@@ -229,7 +229,7 @@ export default class Hoss extends Component {
         >
           <Button type="primary" size="small" style={{ margin: '0 0 10px' }}>
             <Icon type="upload" />
-            {I18n.translate('upload')}
+            {I18n.tr('upload')}
             {this.val.name}
           </Button>
         </Upload>

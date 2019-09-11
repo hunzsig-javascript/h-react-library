@@ -18,7 +18,7 @@ class ThisPage extends Component {
       loading: true,
       operation: [
         {
-          name: I18n.translate('edit'),
+          name: I18n.tr('edit'),
           type: 'button',
           onClick: this.doModify,
           button: {
@@ -27,7 +27,7 @@ class ThisPage extends Component {
           },
         },
         {
-          name: I18n.translate('delete'),
+          name: I18n.tr('delete'),
           type: 'balloon',
           onClick: (data) => {
             this.doDelete(data);
@@ -41,7 +41,7 @@ class ThisPage extends Component {
           },
         },
         {
-          name: I18n.translate('moveUp'),
+          name: I18n.tr('moveUp'),
           type: 'orderingUp',
           onClick: this.doUp,
           button: {
@@ -50,7 +50,7 @@ class ThisPage extends Component {
           },
         },
         {
-          name: I18n.translate('moveDown'),
+          name: I18n.tr('moveDown'),
           type: 'orderingDown',
           onClick: this.doDown,
           button: {
@@ -61,8 +61,8 @@ class ThisPage extends Component {
       ],
     };
     this.jsonKey = this.props.jsonKey; // 对应数据库里的key
-    this.jsonName = this.props.jsonName || I18n.translate('unKnow'); // 对应数据库里的name
-    this.jsonTips = this.props.jsonTips || { add: '', edit: I18n.translate('noTips') };
+    this.jsonName = this.props.jsonName || I18n.tr('unKnow'); // 对应数据库里的name
+    this.jsonTips = this.props.jsonTips || { add: '', edit: I18n.tr('noTips') };
     this.jsonFields = this.props.jsonFields || {}; // 数据所有的field
     this.jsonShow = this.props.jsonShow || []; // 数据展示的field
     this.jsonValues = this.props.jsonValues || []; // 数据支持修改的field
@@ -106,7 +106,7 @@ class ThisPage extends Component {
     const jsonValues = JSON.parse(JSON.stringify(this.jsonValues));
     const modal = Modal.warning({
       width: 800,
-      title: `${I18n.translate('add')}${this.jsonName}`,
+      title: `${I18n.tr('add')}${this.jsonName}`,
       maskClosable: true,
       className: 'vertical-center-modal hideFooter',
       content: (
@@ -138,7 +138,7 @@ class ThisPage extends Component {
               for (const f in this.jsonFields) {
                 if (jsonValuesRequired[f] === true) {
                   if (result[f] === undefined || result[f] === null) {
-                    error = `${I18n.translate('pleaseInputValue')} ${f}`;
+                    error = `${I18n.tr('pleaseInputValue')} ${f}`;
                     break;
                   }
                 }
@@ -146,10 +146,10 @@ class ThisPage extends Component {
                   for (const i in this.state.data) {
                     if (this.state.data[i][f] === result[f]) {
                       error = `
-                        ${I18n.translate('sameAlreadyExists')}
+                        ${I18n.tr('sameAlreadyExists')}
                         ${f}
-                        ${I18n.translate(',')}
-                        ${I18n.translate('pleaseSetOthers')}
+                        ${I18n.tr(',')}
+                        ${I18n.tr('pleaseSetOthers')}
                         ${f}
                       `;
                       break;
@@ -183,7 +183,7 @@ class ThisPage extends Component {
             operation: [
               {
                 type: 'submit',
-                label: I18n.translate('sure'),
+                label: I18n.tr('sure'),
               },
             ],
           }}
@@ -200,7 +200,7 @@ class ThisPage extends Component {
     }
     const modal = Modal.info({
       width: 800,
-      title: `${I18n.translate('edit')}${this.jsonName}`,
+      title: `${I18n.tr('edit')}${this.jsonName}`,
       maskClosable: true,
       className: 'vertical-center-modal hideFooter',
       content: (
@@ -232,7 +232,7 @@ class ThisPage extends Component {
               for (const f in this.jsonFields) {
                 if (jsonValuesRequired[f] === true) {
                   if (result[f] === undefined || result[f] === null) {
-                    error = `${I18n.translate('pleaseInputValue')} ${f}`;
+                    error = `${I18n.tr('pleaseInputValue')} ${f}`;
                     break;
                   }
                 }
@@ -240,10 +240,10 @@ class ThisPage extends Component {
                   for (const i in this.state.data) {
                     if (this.state.data[i][f] === result[f] && this.state.data[i].serial !== temp.serial) {
                       error = `
-                        ${I18n.translate('sameAlreadyExists')}
+                        ${I18n.tr('sameAlreadyExists')}
                         ${f}
-                        ${I18n.translate(',')}
-                        ${I18n.translate('pleaseSetOthers')}
+                        ${I18n.tr(',')}
+                        ${I18n.tr('pleaseSetOthers')}
                         ${f}
                       `;
                       break;
@@ -277,7 +277,7 @@ class ThisPage extends Component {
             operation: [
               {
                 type: 'submit',
-                label: I18n.translate('sure'),
+                label: I18n.tr('sure'),
               },
             ],
           }}
@@ -296,7 +296,7 @@ class ThisPage extends Component {
     });
     Api.real('System.Data.edit', { key: this.jsonKey, data: this.state.data }, (res) => {
       if (res.code === 200) {
-        message.success(I18n.translate('deleteSuccess'));
+        message.success(I18n.tr('deleteSuccess'));
         this.setState({
           loading: false,
           data: values,
@@ -319,7 +319,7 @@ class ThisPage extends Component {
     });
     Api.real('System.Data.edit', { key: this.jsonKey, data: this.state.data }, (res) => {
       if (res.code === 200) {
-        message.success(I18n.translate('moveUpSuccess'));
+        message.success(I18n.tr('moveUpSuccess'));
         this.setState({
           loading: false,
           data: this.state.data,
@@ -342,7 +342,7 @@ class ThisPage extends Component {
     });
     Api.real('System.Data.edit', { key: this.jsonKey, data: this.state.data }, (res) => {
       if (res.code === 200) {
-        message.success(I18n.translate('moveDownSuccess'));
+        message.success(I18n.tr('moveDownSuccess'));
         this.setState({
           loading: false,
           data: this.state.data,
@@ -437,23 +437,23 @@ class ThisPage extends Component {
         <div style={styles.formContent}>
           <h2 style={styles.formTitle}>
             <div>
-              {this.jsonName}{I18n.translate('manage')}
+              {this.jsonName}{I18n.tr('manage')}
               <Button type="primary" size="small" style={{ marginLeft: '3px' }} onClick={this.doInsert}>
-                {I18n.translate('add')}
+                {I18n.tr('add')}
               </Button>
             </div>
           </h2>
           {
             this.state.data !== null &&
             <Table dataSource={this.state.data}>
-              <Table.Column title={I18n.translate('serial')} dataIndex="serial" width={100} />
+              <Table.Column title={I18n.tr('serial')} dataIndex="serial" width={100} />
               {
                 this.jsonShow.map((val, idx) => {
                   const renderColumn = (typeof val.renderColumn === 'function') ? val.renderColumn : this.renderColumn;
                   return <Table.Column key={idx} title={val.title} cell={renderColumn.bind(this, val.dataIndex)} {...val.params} />;
                 })
               }
-              <Table.Column title={I18n.translate('operation')} cell={this.renderOperations} />
+              <Table.Column title={I18n.tr('operation')} cell={this.renderOperations} />
             </Table>
           }
         </div>

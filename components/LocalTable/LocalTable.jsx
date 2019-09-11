@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
-import { Checkbox, Table } from '@icedesign/base';
-import { Button, Tag, Modal, Pagination, LocaleProvider } from 'antd';
-import ZH_CN from 'antd/lib/locale-provider/zh_CN';
+import React, {Component} from 'react';
+import {Checkbox, Table} from '@icedesign/base';
+import {Button, Tag, Modal, Pagination} from 'antd';
 import FilterForm from './../Filter';
 import FilterBalloon from './FilterBalloon';
 import Parse from '../../common/Parse';
@@ -35,7 +34,7 @@ export default class LocalTable extends Component {
       isSearch: typeof this.props.isSearch === 'boolean' ? this.props.isSearch : false,
     };
     // 加序号
-    this.state.display.unshift({ field: 'serial', name: I18n.translate('serial'), width: 100 });
+    this.state.display.unshift({field: 'serial', name: I18n.tr('serial'), width: 100});
     this.filter.forEach((val) => {
       if (this.state.params[val.field] === undefined && val.value && val.value.length > 0) {
         this.state.params[val.field] = val.value;
@@ -48,7 +47,8 @@ export default class LocalTable extends Component {
     this.filterDataSource(true);
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+  }
 
   setDataSource = (dataSource) => {
     this.originDataSource = JSON.parse(JSON.stringify(dataSource || []));
@@ -148,7 +148,7 @@ export default class LocalTable extends Component {
       maskClosable: true,
       className: 'vertical-center-modal',
       content: this.renderChooseCol(),
-      title: I18n.translate('chooseDisplayCol'),
+      title: I18n.tr('chooseDisplayCol'),
       onOk: () => {
         this.changedCols.forEach((ccf) => {
           this.props.table.display.forEach((ptd) => {
@@ -169,9 +169,9 @@ export default class LocalTable extends Component {
       width: 650,
       maskClosable: true,
       className: 'vertical-center-modal hideFooter',
-      title: title || I18n.translate('bigPicture'),
+      title: title || I18n.tr('bigPicture'),
       content: (
-        <img style={{ width: '500px', verticalAlign: 'middle' }} alt={src} src={Parse.img(src)} />
+        <img style={{width: '500px', verticalAlign: 'middle'}} alt={src} src={Parse.img(src)}/>
       ),
     });
   };
@@ -187,7 +187,9 @@ export default class LocalTable extends Component {
     return (
       <Checkbox.Group
         dataSource={dataSource}
-        onChange={(value) => { this.changedCols = this.originDisplay.filter(col => value.indexOf(col.field) > -1); }}
+        onChange={(value) => {
+          this.changedCols = this.originDisplay.filter(col => value.indexOf(col.field) > -1);
+        }}
         defaultValue={defaultValue}
       />
     );
@@ -199,7 +201,7 @@ export default class LocalTable extends Component {
     }
     return (
       <img
-        style={{ maxWidth: '100%', maxHeight: '50px', verticalAlign: 'middle' }}
+        style={{maxWidth: '100%', maxHeight: '50px', verticalAlign: 'middle'}}
         alt={value}
         src={value}
         onClick={this.imgShow.bind(this, null, value)}
@@ -216,16 +218,16 @@ export default class LocalTable extends Component {
     if (data) {
       const dataType = typeof data;
       switch (dataType) {
-      case 'object':
-        if (Array.isArray(data)) {
-          tpl = data.join(',');
-        } else {
-          tpl = JSON.stringify(data);
-        }
-        break;
-      default:
-        tpl = data;
-        break;
+        case 'object':
+          if (Array.isArray(data)) {
+            tpl = data.join(',');
+          } else {
+            tpl = JSON.stringify(data);
+          }
+          break;
+        default:
+          tpl = data;
+          break;
       }
     }
     return (<span key={index}>{tpl}</span>);
@@ -238,31 +240,31 @@ export default class LocalTable extends Component {
         if (o.condition !== undefined && Array.isArray(o.condition)) {
           o.condition.forEach((cond) => {
             switch (cond.cond) {
-            case 'in':
-              if (!cond.value.includes(record[cond.field])) {
-                show = false;
-              }
-              break;
-            case 'like':
-            case 'strpos':
-              if (record[cond.field].indexOf(cond.value) === -1) {
-                show = false;
-              }
-              break;
-            case 'neq':
-            case '!=':
-            case '<>':
-              if (record[cond.field] === cond.value) {
-                show = false;
-              }
-              break;
-            case 'eq':
-            case '=':
-            default:
-              if (record[cond.field] !== cond.value) {
-                show = false;
-              }
-              break;
+              case 'in':
+                if (!cond.value.includes(record[cond.field])) {
+                  show = false;
+                }
+                break;
+              case 'like':
+              case 'strpos':
+                if (record[cond.field].indexOf(cond.value) === -1) {
+                  show = false;
+                }
+                break;
+              case 'neq':
+              case '!=':
+              case '<>':
+                if (record[cond.field] === cond.value) {
+                  show = false;
+                }
+                break;
+              case 'eq':
+              case '=':
+              default:
+                if (record[cond.field] !== cond.value) {
+                  show = false;
+                }
+                break;
             }
           });
         }
@@ -272,24 +274,24 @@ export default class LocalTable extends Component {
         let tpl = null;
         const id = `h${o.type}_${index}_${idx}`;
         switch (o.type) {
-        case 'button':
-          tpl = (
-            <Button
-              id={id}
-              style={styles.operationBtn}
-              key={idx}
-              {...o.params} // see https://ant.design/components/button-cn/
-              onClick={o.onClick !== undefined ? o.onClick.bind(this, index, record) : undefined}
-            >
-              {o.name}
-            </Button>
-          );
-          break;
-        case 'balloon':
-          tpl = <FilterBalloon key={idx} o={o} index={index} record={record} />;
-          break;
-        default:
-          break;
+          case 'button':
+            tpl = (
+              <Button
+                id={id}
+                style={styles.operationBtn}
+                key={idx}
+                {...o.params} // see https://ant.design/components/button-cn/
+                onClick={o.onClick !== undefined ? o.onClick.bind(this, index, record) : undefined}
+              >
+                {o.name}
+              </Button>
+            );
+            break;
+          case 'balloon':
+            tpl = <FilterBalloon key={idx} o={o} index={index} record={record}/>;
+            break;
+          default:
+            break;
         }
         return tpl;
       })
@@ -302,20 +304,25 @@ export default class LocalTable extends Component {
         <h2 style={styles.contentTitle}>
           <div>
             {this.title.length > 0 && <span>{this.title}</span>}
-            {typeof this.onAdd === 'function' && <Button type="primary" size="small" style={{ marginLeft: '3px' }} onClick={this.onAdd}>{I18n.translate('add')}</Button>}
-            {typeof this.prepareExcel === 'function' && <Button type="default" size="small" style={{ marginLeft: '3px' }} onClick={this.prepareExcel}>{I18n.translate('export')}</Button>}
+            {typeof this.onAdd === 'function' && <Button type="primary" size="small" style={{marginLeft: '3px'}}
+                                                         onClick={this.onAdd}>{I18n.tr('add')}</Button>}
+            {typeof this.prepareExcel === 'function' && <Button type="default" size="small" style={{marginLeft: '3px'}}
+                                                                onClick={this.prepareExcel}>{I18n.tr('export')}</Button>}
           </div>
         </h2>
-        <div style={{ position: 'relative', height: '30px' }}>
-          <div style={{ textAlign: 'right' }}>
-            <div style={{ position: 'absolute', top: 0, textAlign: 'left' }}>
-              {this.state.page && <Tag>{I18n.translate('total') + this.state.dataSourceNotPage.length + I18n.translate('results')}</Tag>}
-              {this.state.page && <Tag>{I18n.translate('inPage') + this.state.dataSource.length + I18n.translate('results')}</Tag>}
+        <div style={{position: 'relative', height: '30px'}}>
+          <div style={{textAlign: 'right'}}>
+            <div style={{position: 'absolute', top: 0, textAlign: 'left'}}>
+              {this.state.page &&
+              <Tag>{I18n.tr('total') + this.state.dataSourceNotPage.length + I18n.tr('results')}</Tag>}
+              {this.state.page && <Tag>{I18n.tr('inPage') + this.state.dataSource.length + I18n.tr('results')}</Tag>}
             </div>
             <Button.Group size="small">
-              {this.filter.length > 0 && <Button type={this.state.isSearch ? 'primary' : 'default'} onClick={this.colSearch}> {this.state.isSearch ? I18n.translate('searchHide') : I18n.translate('searchShow')} </Button>}
-              <Button type={this.state.isLockCol ? 'primary' : 'default'} onClick={this.colLock}> {this.state.isLockCol ? I18n.translate('tableHeadUnLock') : I18n.translate('tableHeadLock')} </Button>
-              <Button onClick={this.colChoose}> {I18n.translate('chooseDisplayCol')}({this.changedCols.length}) </Button>
+              {this.filter.length > 0 && <Button type={this.state.isSearch ? 'primary' : 'default'}
+                                                 onClick={this.colSearch}> {this.state.isSearch ? I18n.tr('searchHide') : I18n.tr('searchShow')} </Button>}
+              <Button type={this.state.isLockCol ? 'primary' : 'default'}
+                      onClick={this.colLock}> {this.state.isLockCol ? I18n.tr('tableHeadUnLock') : I18n.tr('tableHeadLock')} </Button>
+              <Button onClick={this.colChoose}> {I18n.tr('chooseDisplayCol')}({this.changedCols.length}) </Button>
             </Button.Group>
           </div>
         </div>
@@ -341,29 +348,30 @@ export default class LocalTable extends Component {
               let tpl = null;
               const renderColumn = (typeof d.renderColumn === 'function') ? d.renderColumn : this.renderColumn;
               switch (d.type) {
-              case 'image':
-              case 'img':
-              case 'pic':
-              case 'picture':
-                tpl = (
-                  <Table.Column
-                    key={idx}
-                    title={d.name}
-                    dataIndex={d.field}
-                    width={d.width}
-                    cell={this.renderImg}
-                  />
-                );
-                break;
-              default:
-                tpl = <Table.Column key={idx} title={d.name} cell={renderColumn.bind(this, d)} width={d.width} sortable={typeof d.sortable === 'boolean' ? d.sortable : false} />;
-                break;
+                case 'image':
+                case 'img':
+                case 'pic':
+                case 'picture':
+                  tpl = (
+                    <Table.Column
+                      key={idx}
+                      title={d.name}
+                      dataIndex={d.field}
+                      width={d.width}
+                      cell={this.renderImg}
+                    />
+                  );
+                  break;
+                default:
+                  tpl = <Table.Column key={idx} title={d.name} cell={renderColumn.bind(this, d)} width={d.width}
+                                      sortable={typeof d.sortable === 'boolean' ? d.sortable : false}/>;
+                  break;
               }
               return tpl;
             })
           }
           <Table.Column
-            title={I18n.translate('operation')}
+            title={I18n.tr('operation')}
             width={200}
             cell={this.renderOperations}
           />
@@ -371,19 +379,17 @@ export default class LocalTable extends Component {
         {
           this.state.params.page === 1 &&
           <div style={styles.paginationWrapper}>
-            <LocaleProvider locale={ZH_CN}>
-              <Pagination
-                style={styles.pagination}
-                total={Math.ceil(this.state.dataSourceNotPage.length / this.state.page.per)}
-                current={this.state.page.current + 1}
-                pageSize={this.state.page.per}
-                showQuickJumper={true}
-                onChange={this.onPageChange}
-                showSizeChanger={true}
-                pageSizeOptions={['5', '10', '20', '25', '50', '100', '250']}
-                onShowSizeChange={this.onPageSizeChange}
-              />
-            </LocaleProvider>
+            <Pagination
+              style={styles.pagination}
+              total={Math.ceil(this.state.dataSourceNotPage.length / this.state.page.per)}
+              current={this.state.page.current + 1}
+              pageSize={this.state.page.per}
+              showQuickJumper={true}
+              onChange={this.onPageChange}
+              showSizeChanger={true}
+              pageSizeOptions={['5', '10', '20', '25', '50', '100', '250']}
+              onShowSizeChange={this.onPageSizeChange}
+            />
           </div>
         }
       </div>

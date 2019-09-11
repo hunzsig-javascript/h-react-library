@@ -60,7 +60,7 @@ const Excel = {
     pullExcel.excelPull(element, set, then);
   },
   pull: (opts) => {
-    opts.tips = opts.tips || I18n.translate('excelExporting');
+    opts.tips = opts.tips || I18n.tr('excelExporting');
     opts.isZip = opts.isZip || 1;
     opts.filter = opts.filter || [];
     opts.sheet = opts.sheet || [];
@@ -77,7 +77,7 @@ const Excel = {
     const id = (new Date()).getTime();
     const modal = Modal.warn({
       width: 700,
-      title: I18n.translate('excelExport'),
+      title: I18n.tr('excelExport'),
       maskClosable: true,
       className: 'vertical-center-modal hideFooter',
       content: (
@@ -98,7 +98,7 @@ const Excel = {
                   {
                     type: 'select',
                     field: 'sheetLength',
-                    name: I18n.translate('excelSheetPerRow'),
+                    name: I18n.tr('excelSheetPerRow'),
                     map: Excel.sheetLength,
                     binderType: 'number',
                   },
@@ -109,7 +109,7 @@ const Excel = {
             operation: [
               {
                 type: 'submit',
-                label: I18n.translate('excelExportStart'),
+                label: I18n.tr('excelExportStart'),
               },
             ],
             onSubmit: (value) => {
@@ -120,7 +120,7 @@ const Excel = {
               }
               const loading = Modal.info({
                 width: 700,
-                title: I18n.translate('waitAMoment'),
+                title: I18n.tr('waitAMoment'),
                 className: 'vertical-center-modal',
                 content: (
                   <Progress id={id} percent={0} status="active"/>
@@ -134,7 +134,7 @@ const Excel = {
               }, (percent) => {
                 if (percent === -1) {
                   loading.destroy();
-                  message.info(I18n.translate('excelExportNoData'));
+                  message.info(I18n.tr('excelExportNoData'));
                 } else {
                   const apb = document.getElementById(id).getElementsByClassName('ant-progress-bg')[0];
                   const apt = document.getElementById(id).getElementsByClassName('ant-progress-text')[0];
@@ -167,26 +167,26 @@ const Excel = {
 
     const modal = Modal.info({
       width: 700,
-      title: I18n.translate('excelImport'),
+      title: I18n.tr('excelImport'),
       maskClosable: true,
       className: 'vertical-center-modal hideFooter',
       content: (
         <div style={styles.excelBox}>
           <Alert
-            message={I18n.translate('excelImportDownloadFileForExample')}
+            message={I18n.tr('excelImportDownloadFileForExample')}
             description={(
               <div>
                 <p>{opts.text}</p>
                 {
                   opts.downloadText &&
-                  <a style={{marginRight: '2rem'}} href={opts.downloadText} download={I18n.translate('guideBook')}>
-                    {I18n.translate('excelDownloadGuideBook')}
+                  <a style={{marginRight: '2rem'}} href={opts.downloadText} download={I18n.tr('guideBook')}>
+                    {I18n.tr('excelDownloadGuideBook')}
                   </a>
                 }
                 {
                   opts.download &&
-                  <a href={opts.download} download={I18n.translate('guideTpl')}>
-                    {I18n.translate('excelDownloadGuideTpl')}
+                  <a href={opts.download} download={I18n.tr('guideTpl')}>
+                    {I18n.tr('excelDownloadGuideTpl')}
                   </a>
                 }
               </div>
@@ -202,7 +202,7 @@ const Excel = {
             beforeUpload={beforeUpload}
             multiple
           >
-            <Button type="primary" style={{margin: "1rem 0 10px"}}>{I18n.translate('uploadFile')}</Button>
+            <Button type="primary" style={{margin: "1rem 0 10px"}}>{I18n.tr('uploadFile')}</Button>
           </Upload>
         </div>
       ),

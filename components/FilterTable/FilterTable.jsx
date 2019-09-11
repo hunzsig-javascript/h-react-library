@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { Table } from '@icedesign/base';
-import { Spin, Button, Icon, Tag, Modal, Pagination, LocaleProvider, Checkbox } from 'antd';
+import React, {Component} from 'react';
+import {Table} from '@icedesign/base';
+import {Spin, Button, Icon, Tag, Modal, Pagination, Checkbox} from 'antd';
 import ZH_CN from 'antd/lib/locale-provider/zh_CN';
 import FilterForm from './../Filter';
 import FilterTableBalloon from './FilterTableBalloon';
@@ -16,7 +16,7 @@ export default class EnhanceTable extends Component {
     if (typeof this.props.onRef === 'function') {
       this.props.onRef(this);
     }
-    this.title = this.props.title || I18n.translate('oneList');
+    this.title = this.props.title || I18n.tr('oneList');
     this.hasBorder = typeof this.props.hasBorder === 'boolean' ? this.props.hasBorder : true;
     this.maxBodyHeight = this.props.maxBodyHeight || 500;
     this.isTree = this.props.isTree || false;
@@ -26,12 +26,13 @@ export default class EnhanceTable extends Component {
     this.onAdd = this.props.table.onAdd;
     this.onSelected = this.props.table.onSelected || null;
     this.onAdd2 = this.props.table.onAdd2;
-    this.onAddName = this.props.table.onAddName || I18n.translate('add');
+    this.onAddName = this.props.table.onAddName || I18n.tr('add');
     this.onAdd2Name = this.props.table.onAdd2Name || '添加';
     this.onExcelPush = this.props.table.onExcelPush;
     this.onExcelPull = this.props.table.onExcelPull;
     this.onPrint = this.props.table.onPrint;
-    this.expandedRowRender = this.props.table.expandedRowRender || function () {};
+    this.expandedRowRender = this.props.table.expandedRowRender || function () {
+    };
     this.hasExpandedRowCtrl = this.props.table.hasExpandedRowCtrl || false;
     this.filter = this.props.table.filter || [];
     this.filterFormatter = this.props.table.filterFormatter;
@@ -47,7 +48,7 @@ export default class EnhanceTable extends Component {
       isSearch: typeof this.props.isSearch === 'boolean' ? this.props.isSearch : false,
     };
     // 加序号
-    this.state.display.unshift({ field: 'serial', name: I18n.translate('serial'), width: 63, align: 'center' });
+    this.state.display.unshift({field: 'serial', name: I18n.tr('serial'), width: 63, align: 'center'});
     // 如果遇到分页的设定，在开头加上分页条数
     if (this.state.params.page === 1) {
       this.state.params.pageCurrent = 0;
@@ -171,7 +172,7 @@ export default class EnhanceTable extends Component {
       maskClosable: true,
       className: 'vertical-center-modal',
       content: this.renderChooseCol(),
-      title: I18n.translate('chooseDisplayCol'),
+      title: I18n.tr('chooseDisplayCol'),
       onOk: () => {
         this.changedCols.forEach((ccf) => {
           this.props.table.display.forEach((ptd) => {
@@ -192,9 +193,9 @@ export default class EnhanceTable extends Component {
       width: 650,
       maskClosable: true,
       className: 'vertical-center-modal hideFooter',
-      title: title || I18n.translate('bigPicture'),
+      title: title || I18n.tr('bigPicture'),
       content: (
-        <img style={{ width: '500px', verticalAlign: 'middle' }} alt={src} src={Parse.img(src)} />
+        <img style={{width: '500px', verticalAlign: 'middle'}} alt={src} src={Parse.img(src)}/>
       ),
     });
   };
@@ -210,7 +211,9 @@ export default class EnhanceTable extends Component {
     return (
       <Checkbox.Group
         options={dataSource}
-        onChange={(value) => { this.changedCols = this.originDisplay.filter(col => value.indexOf(col.field) > -1); }}
+        onChange={(value) => {
+          this.changedCols = this.originDisplay.filter(col => value.indexOf(col.field) > -1);
+        }}
         defaultValue={defaultValue}
       />
     );
@@ -246,38 +249,38 @@ export default class EnhanceTable extends Component {
         if (o.condition !== undefined && Array.isArray(o.condition)) {
           o.condition.forEach((cond) => {
             switch (cond.cond) {
-            case '^':
-            case 'in':
-              if (!cond.value.includes(record[cond.field])) {
-                show = false;
-              }
-              break;
-            case 'notin':
-            case '!^':
-              if (cond.value.includes(record[cond.field])) {
-                show = false;
-              }
-              break;
-            case 'like':
-            case 'strpos':
-              if (record[cond.field].indexOf(cond.value) === -1) {
-                show = false;
-              }
-              break;
-            case 'neq':
-            case '!=':
-            case '<>':
-              if (record[cond.field] === cond.value) {
-                show = false;
-              }
-              break;
-            case 'eq':
-            case '=':
-            default:
-              if (record[cond.field] !== cond.value) {
-                show = false;
-              }
-              break;
+              case '^':
+              case 'in':
+                if (!cond.value.includes(record[cond.field])) {
+                  show = false;
+                }
+                break;
+              case 'notin':
+              case '!^':
+                if (cond.value.includes(record[cond.field])) {
+                  show = false;
+                }
+                break;
+              case 'like':
+              case 'strpos':
+                if (record[cond.field].indexOf(cond.value) === -1) {
+                  show = false;
+                }
+                break;
+              case 'neq':
+              case '!=':
+              case '<>':
+                if (record[cond.field] === cond.value) {
+                  show = false;
+                }
+                break;
+              case 'eq':
+              case '=':
+              default:
+                if (record[cond.field] !== cond.value) {
+                  show = false;
+                }
+                break;
             }
           });
         }
@@ -287,24 +290,24 @@ export default class EnhanceTable extends Component {
         let tpl = null;
         const id = `h${o.type}_${index}_${idx}`;
         switch (o.type) {
-        case 'button':
-          tpl = (
-            <Button
-              id={id}
-              style={styles.operationBtn}
-              key={idx}
-              {...o.params} // see https://ant.design/components/button-cn/
-              onClick={o.onClick !== undefined ? o.onClick.bind(this, index, record) : undefined}
-            >
-              {o.name}
-            </Button>
-          );
-          break;
-        case 'balloon':
-          tpl = <FilterTableBalloon key={idx} o={o} index={index} record={record} />;
-          break;
-        default:
-          break;
+          case 'button':
+            tpl = (
+              <Button
+                id={id}
+                style={styles.operationBtn}
+                key={idx}
+                {...o.params} // see https://ant.design/components/button-cn/
+                onClick={o.onClick !== undefined ? o.onClick.bind(this, index, record) : undefined}
+              >
+                {o.name}
+              </Button>
+            );
+            break;
+          case 'balloon':
+            tpl = <FilterTableBalloon key={idx} o={o} index={index} record={record}/>;
+            break;
+          default:
+            break;
         }
         return tpl;
       })
@@ -317,35 +320,43 @@ export default class EnhanceTable extends Component {
         <h2 style={styles.contentTitle}>
           <div>
             {this.title}
-            {typeof this.onAdd === 'function' && <Button type="primary" size="small" style={{ marginLeft: '3px' }} onClick={this.onAdd}>{this.onAddName}</Button>}
-            {typeof this.onAdd2 === 'function' && <Button type="default" size="small" style={{ marginLeft: '3px' }} onClick={this.onAdd2}>{this.onAdd2Name}</Button>}
-            {typeof this.onExcelPush === 'function' && <Button type="default" size="small" style={{ marginLeft: '3px' }} onClick={this.onExcelPush}>{I18n.translate('import')}</Button>}
-            {typeof this.onExcelPull === 'function' && <Button type="dashed" size="small" style={{ marginLeft: '3px' }} onClick={this.onExcelPull}>{I18n.translate('export')}</Button>}
-            {typeof this.onPrint === 'function' && <Button type="default" size="small" style={{ marginLeft: '3px' }} onClick={this.onPrint}>{I18n.translate('print')}</Button>}
+            {typeof this.onAdd === 'function' && <Button type="primary" size="small" style={{marginLeft: '3px'}}
+                                                         onClick={this.onAdd}>{this.onAddName}</Button>}
+            {typeof this.onAdd2 === 'function' && <Button type="default" size="small" style={{marginLeft: '3px'}}
+                                                          onClick={this.onAdd2}>{this.onAdd2Name}</Button>}
+            {typeof this.onExcelPush === 'function' && <Button type="default" size="small" style={{marginLeft: '3px'}}
+                                                               onClick={this.onExcelPush}>{I18n.tr('import')}</Button>}
+            {typeof this.onExcelPull === 'function' && <Button type="dashed" size="small" style={{marginLeft: '3px'}}
+                                                               onClick={this.onExcelPull}>{I18n.tr('export')}</Button>}
+            {typeof this.onPrint === 'function' && <Button type="default" size="small" style={{marginLeft: '3px'}}
+                                                           onClick={this.onPrint}>{I18n.tr('print')}</Button>}
           </div>
         </h2>
-        <div style={{ position: 'relative', height: '30px' }}>
-          <div style={{ textAlign: 'right' }}>
+        <div style={{position: 'relative', height: '30px'}}>
+          <div style={{textAlign: 'right'}}>
             {
               this.state.page &&
-              <div style={{ position: 'absolute', top: 0, textAlign: 'left' }}>
-                <Tag>{I18n.translate('total') + this.state.page.total + I18n.translate('results')}</Tag>
-                <Tag>{I18n.translate('inPage') + (this.state.result ? this.state.result.length : 0) + I18n.translate('results')}</Tag>
+              <div style={{position: 'absolute', top: 0, textAlign: 'left'}}>
+                <Tag>{I18n.tr('total') + this.state.page.total + I18n.tr('results')}</Tag>
+                <Tag>{I18n.tr('inPage') + (this.state.result ? this.state.result.length : 0) + I18n.tr('results')}</Tag>
               </div>
             }
             {
               !this.state.page &&
-              <div style={{ position: 'absolute', top: 0, textAlign: 'left' }}>
-                <Tag>{I18n.translate('total') + (this.state.result ? this.state.result.length : 0) + I18n.translate('results')}</Tag>
+              <div style={{position: 'absolute', top: 0, textAlign: 'left'}}>
+                <Tag>{I18n.tr('total') + (this.state.result ? this.state.result.length : 0) + I18n.tr('results')}</Tag>
               </div>
             }
             <Button.Group size="small">
               <Button type="primary" disabled={this.state.loading} onClick={this.apiQuery}>
-                <Icon type={this.state.loading ? 'loading' : 'reload'} />{this.state.loading ? I18n.translate('wait') : I18n.translate('fresh')}
+                <Icon
+                  type={this.state.loading ? 'loading' : 'reload'}/>{this.state.loading ? I18n.tr('wait') : I18n.tr('fresh')}
               </Button>
-              {this.filter.length > 0 && <Button type={this.state.isSearch ? 'primary' : 'default'} onClick={this.colSearch}> {this.state.isSearch ? I18n.translate('searchHide') : I18n.translate('searchShow')} </Button>}
-              <Button type={this.state.isLockCol ? 'primary' : 'default'} onClick={this.colLock}> {this.state.isLockCol ? I18n.translate('tableHeadUnLock') : I18n.translate('tableHeadLock')} </Button>
-              <Button onClick={this.colChoose}> {I18n.translate('chooseDisplayCol')}({this.changedCols.length}) </Button>
+              {this.filter.length > 0 && <Button type={this.state.isSearch ? 'primary' : 'default'}
+                                                 onClick={this.colSearch}> {this.state.isSearch ? I18n.tr('searchHide') : I18n.tr('searchShow')} </Button>}
+              <Button type={this.state.isLockCol ? 'primary' : 'default'}
+                      onClick={this.colLock}> {this.state.isLockCol ? I18n.tr('tableHeadUnLock') : I18n.tr('tableHeadLock')} </Button>
+              <Button onClick={this.colChoose}> {I18n.tr('chooseDisplayCol')}({this.changedCols.length}) </Button>
             </Button.Group>
           </div>
         </div>
@@ -376,13 +387,15 @@ export default class EnhanceTable extends Component {
             {
               this.state.display.map((d, idx) => {
                 const renderColumn = (typeof d.renderColumn === 'function') ? d.renderColumn : this.renderColumn;
-                return <Table.Column key={idx} title={d.name} cell={renderColumn.bind(this, d)} width={d.width} sortable={typeof d.sortable === 'boolean' ? d.sortable : false} align={d.align || 'left'} />;
+                return <Table.Column key={idx} title={d.name} cell={renderColumn.bind(this, d)} width={d.width}
+                                     sortable={typeof d.sortable === 'boolean' ? d.sortable : false}
+                                     align={d.align || 'left'}/>;
               })
             }
             {
               this.operation.length > 0 &&
               <Table.Column
-                title={I18n.translate('operation')}
+                title={I18n.tr('operation')}
                 width={this.operationWidth}
                 cell={this.renderOperations}
               />
@@ -391,19 +404,17 @@ export default class EnhanceTable extends Component {
           {
             this.state.page !== null &&
             <div style={styles.paginationWrapper}>
-              <LocaleProvider locale={ZH_CN}>
-                <Pagination
-                  style={styles.pagination}
-                  total={this.state.page.total}
-                  current={this.state.page.current + 1}
-                  pageSize={this.state.params.pagePer}
-                  showQuickJumper={true}
-                  onChange={this.onPageChange}
-                  showSizeChanger={true}
-                  pageSizeOptions={['5', '10', '20', '25', '50', '100', '250']}
-                  onShowSizeChange={this.onPageSizeChange}
-                />
-              </LocaleProvider>
+              <Pagination
+                style={styles.pagination}
+                total={this.state.page.total}
+                current={this.state.page.current + 1}
+                pageSize={this.state.params.pagePer}
+                showQuickJumper={true}
+                onChange={this.onPageChange}
+                showSizeChanger={true}
+                pageSizeOptions={['5', '10', '20', '25', '50', '100', '250']}
+                onShowSizeChange={this.onPageSizeChange}
+              />
             </div>
           }
         </Spin>

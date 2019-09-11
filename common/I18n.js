@@ -9,7 +9,7 @@ const I18n = {
   setExternal: (externalI18n) => {
     I18n.externalI18n = externalI18n;
   },
-  translate: (trans, lang = null) => {
+  tr: (trans, lang = null) => {
     if (lang === null) {
       lang = I18n.defaultLang;
     }

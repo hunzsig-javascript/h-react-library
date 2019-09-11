@@ -31,15 +31,15 @@ const ApiLoad = (key) => {
 const Http = {
   CacheKeyLimit: 3000,
   PathLogin: null,
-  TipsLogin: I18n.translate('loginTimeout'),
-  Tips403: I18n.translate('loginTimeoutOrNotPermission'),
+  TipsLogin: I18n.tr('loginTimeout'),
+  Tips403: I18n.tr('loginTimeoutOrNotPermission'),
   cache: (conf) => {
     if (Array.isArray(conf.scope)) {
       Http.runAll(conf, false);
     } else if (typeof conf.scope === 'string') {
       Http.run(conf, false);
     } else {
-      message.error(I18n.translate('scopeError'));
+      message.error(I18n.tr('scopeError'));
     }
   },
   real: (conf) => {
@@ -48,7 +48,7 @@ const Http = {
     } else if (typeof conf.scope === 'string') {
       Http.run(conf, true);
     } else {
-      message.error(I18n.translate('scopeError'));
+      message.error(I18n.tr('scopeError'));
     }
   },
   run: (conf, refresh) => {
@@ -79,7 +79,7 @@ const Http = {
                 Parse.locationTo(Http.PathLogin);
               });
             }
-            then({code: 500, response: I18n.translate('limitedOperation'), data: null});
+            then({code: 500, response: I18n.tr('limitedOperation'), data: null});
             return;
           }
           then(response.data);
@@ -87,47 +87,47 @@ const Http = {
             ApiSave(key, response.data);
           }
         } else {
-          then({code: 500, response: I18n.translate('apiError'), data: null});
+          then({code: 500, response: I18n.tr('apiError'), data: null});
         }
       })
       .catch((error) => {
         const status = (error.response && error.response.status) ? error.response.status : -1;
         switch (status) {
           case 400:
-            error.message = I18n.translate('apiErrorQuery');
+            error.message = I18n.tr('apiErrorQuery');
             break;
           case 401:
-            error.message = I18n.translate('apiErrorNotAuth');
+            error.message = I18n.tr('apiErrorNotAuth');
             break;
           case 403:
-            error.message = I18n.translate('apiErrorReject');
+            error.message = I18n.tr('apiErrorReject');
             break;
           case 404:
-            error.message = I18n.translate('apiErrorAbort');
+            error.message = I18n.tr('apiErrorAbort');
             break;
           case 408:
-            error.message = I18n.translate('apiErrorTimeout');
+            error.message = I18n.tr('apiErrorTimeout');
             break;
           case 500:
-            error.message = I18n.translate('apiErrorServer');
+            error.message = I18n.tr('apiErrorServer');
             break;
           case 501:
-            error.message = I18n.translate('apiErrorNotService');
+            error.message = I18n.tr('apiErrorNotService');
             break;
           case 502:
-            error.message = I18n.translate('apiErrorNet');
+            error.message = I18n.tr('apiErrorNet');
             break;
           case 503:
-            error.message = I18n.translate('apiErrorServiceDisable');
+            error.message = I18n.tr('apiErrorServiceDisable');
             break;
           case 504:
-            error.message = I18n.translate('apiErrorNetTimeout');
+            error.message = I18n.tr('apiErrorNetTimeout');
             break;
           case 505:
-            error.message = I18n.translate('apiErrorNotSupportHttp');
+            error.message = I18n.tr('apiErrorNotSupportHttp');
             break;
           default:
-            error.message = `${I18n.translate('apiErrorDefault')}(${status})!`;
+            error.message = `${I18n.tr('apiErrorDefault')}(${status})!`;
         }
         then({code: status, response: error.message, data: null});
       });
@@ -191,7 +191,7 @@ const Http = {
               }
             }
           } else {
-            result[pushIdx] = {code: 500, response: I18n.translate('apiError'), data: null};
+            result[pushIdx] = {code: 500, response: I18n.tr('apiError'), data: null};
           }
         });
         if (hasNotAuth === true) {
@@ -200,7 +200,7 @@ const Http = {
               Parse.locationTo(Http.PathLogin);
             });
           } else {
-            message.warning(I18n.translate('operationNotPermission'));
+            message.warning(I18n.tr('operationNotPermission'));
           }
         } else {
           then(result);

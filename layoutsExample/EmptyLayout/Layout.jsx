@@ -16,7 +16,7 @@ class hLayout extends Component {
   constructor(props) {
     super(props);
     if (Auth.isOnline() === false) {
-      message.error(I18n.translate('loginOffline'), 3.00);
+      message.error(I18n.tr('loginOffline'), 3.00);
       this.props.history.replace(Auth.getLoginPath());
     }
     this.state = {};

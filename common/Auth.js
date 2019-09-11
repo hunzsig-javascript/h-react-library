@@ -107,7 +107,7 @@ const Auth = {
   userName: (data) => {
     let name = '';
     if (typeof data !== 'object') {
-      name = I18n.translate('loading');
+      name = I18n.tr('loading');
     }
     if (data.user_mobile) name = data.user_mobile;
     if (data.user_email) name = data.user_email;

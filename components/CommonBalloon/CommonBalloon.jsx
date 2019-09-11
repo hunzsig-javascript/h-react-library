@@ -55,7 +55,7 @@ export default class CommonBalloon extends Component {
         onVisibleChange={this.handleVisibleChange.bind(this)}
       >
         <div>
-          <div style={styles.balloonText}>{I18n.translate('confirmOperation')}</div>
+          <div style={styles.balloonText}>{I18n.tr('confirmOperation')}</div>
           <Button
             id="confirmBtn"
             size="small"
@@ -63,14 +63,14 @@ export default class CommonBalloon extends Component {
             style={{ marginRight: '5px' }}
             onClick={this.sure.bind(this)}
           >
-            {I18n.translate('yes')}
+            {I18n.tr('yes')}
           </Button>
           <Button
             id="cancelBtn"
             size="small"
             onClick={this.cancel.bind(this)}
           >
-            {I18n.translate('no')}
+            {I18n.tr('no')}
           </Button>
         </div>
       </Balloon>

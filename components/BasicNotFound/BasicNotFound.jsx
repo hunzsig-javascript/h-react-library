@@ -8,10 +8,10 @@ export default class BasicNotFound extends Component {
       <div className="basic-not-found" style={styles.notFoundContainer}>
         <div style={styles.notfoundContent}>
           <div className="prompt">
-            <h3 style={styles.title}>{I18n.translate('sorryPageLost')}</h3>
+            <h3 style={styles.title}>{I18n.tr('sorryPageLost')}</h3>
             <p style={styles.description}>
-              {I18n.translate('pageNotFound')}<Link to="/">{I18n.translate('homepage')}</Link>
-              {I18n.translate('continue')}
+              {I18n.tr('pageNotFound')}<Link to="/">{I18n.tr('homepage')}</Link>
+              {I18n.tr('continue')}
             </p>
           </div>
         </div>
