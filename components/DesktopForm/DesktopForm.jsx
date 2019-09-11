@@ -520,22 +520,17 @@ export default class DesktopForm extends Component {
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
               </Col>
               <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder
-                  type={val.binderType || 'string'}
-                  name={val.field}
-                  message={I18n.tr('pleaseInput') + val.name}
-                  valueFormatter={(result) => {
+                <span>{I18n.tr('pleaseInput') + val.name}</span>
+                <Input
+                  style={{position: 'absolute', left: 0, top: 0, bottom: 0, right: 0, opacity: 0}}
+                  placeholder={I18n.tr('pleaseInput') + val.name}
+                  value={this.state.values[val.field]}
+                  readOnly={true}
+                  required={val.params && val.params.required ? val.params.required : false}
+                  onChange={(result) => {
                     return this.binderValueFormatter(val, result);
                   }}
-                >
-                  <Input
-                    style={{position: 'absolute', left: 0, top: 0, bottom: 0, right: 0, opacity: 0}}
-                    placeholder={I18n.tr('pleaseInput') + val.name}
-                    value={this.state.values[val.field]}
-                    readOnly={true}
-                    required={val.params && val.params.required ? val.params.required : false}
-                  />
-                </IceFormBinder>
+                />
                 <div>
                   <Input.Search
                     className={`fromItemWidth${c} ${val.type}`}
@@ -1583,21 +1578,19 @@ export default class DesktopForm extends Component {
                 {val.name && val.name.length > 0 && <label>{val.name}：</label>}
               </Col>
               <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="string" name={val.field} message={I18n.tr('pleaseInput') + val.name}
-                               valueFormatter={(result) => {
-                                 return this.binderValueFormatter(val, result);
-                               }}>
-                  <Input
-                    className={val.type ? `fromItemWidth${c} ${val.type}` : `fromItemWidth${c} str`}
-                    size={size}
-                    allowClear={true}
-                    placeholder={I18n.tr('pleaseInput') + val.name}
-                    ref={node => this.state.nodeShadow[val.field] = node}
-                    defaultValue={this.state.values[val.field]}
-                    {...val.params}
-                  />
-                </IceFormBinder>
-                <div><IceFormError name={val.field}/></div>
+                <Input
+                  className={val.type ? `fromItemWidth${c} ${val.type}` : `fromItemWidth${c} str`}
+                  size={size}
+                  allowClear={true}
+                  placeholder={I18n.tr('pleaseInput') + val.name}
+                  ref={node => this.state.nodeShadow[val.field] = node}
+                  defaultValue={this.state.values[val.field]}
+                  onChange={(result) => {
+                    return this.binderValueFormatter(val, result);
+                  }}
+                  {...val.params}
+                />
+                <DesktopFormError message={this.state.error[val.field]}/>
               </Col>
             </Row>
           </Col>
