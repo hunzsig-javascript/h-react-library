@@ -61,8 +61,8 @@ export default class DesktopForm extends Component {
       valuesShadow: {},
       nodeShadow: {},
       loading: false,
-      error: {},
-      globalError: '',
+      errorStatus: this.props.form.defaultErrorStatus || false,
+      errorResponse: '',
       renderNet: [],
       renderEmail: [],
     };
@@ -93,9 +93,15 @@ export default class DesktopForm extends Component {
     });
   };
 
-  setError = (error) => {
+  setErrorResponse = (error) => {
     this.setState({
-      error: error,
+      errorResponse: error,
+    });
+  };
+
+  setErrorStatus = (errorMessage) => {
+    this.setState({
+      errorStatus: errorMessage !== '',
     });
   };
 
@@ -164,32 +170,15 @@ export default class DesktopForm extends Component {
   };
 
   /**
-   * 验证器
+   * 提交
    */
-  validateAllFormField = () => {
-    let errorQty = 0;
-    this.state.items.forEach((item) => {
-      item.values.forEach((item) => {
-        console.log(this.state.values);
-        if (item.params && item.params.required) {
-          if (!this.state.values[item.field]) {
-            errorQty += 1;
-            this.state.error[item.field] = `${item.label} is required` + (new Date().getTime());
-          } else {
-            this.state.error[item.field] = '';
-          }
-        }
-      });
-    });
-    this.setState({
-      error: this.state.error,
-    });
-    if (errorQty === 0) {
+  formSubmit = () => {
+    if (this.state.errorStatus === false) {
       let v = JSON.parse(JSON.stringify(this.state.values));
       if (typeof this.state.valueFormatter === 'function') {
         v = this.state.valueFormatter(v);
         if (typeof v === 'string') {
-          this.setError(v);
+          this.setErrorResponse(v);
           return;
         }
       }
@@ -198,9 +187,9 @@ export default class DesktopForm extends Component {
         this.state.onSubmit(v);
       }
       if (this.state.scope !== null) {
-        this.setError('');
+        this.setErrorResponse('');
         this.setLoading(true);
-        Api.real(this.state.scope, v, (res) => {
+        Api.connect().real(this.state.scope, v, (res) => {
           this.setLoading(false);
           if (res.code === 200) {
             if (this.state.refresh === true) {
@@ -208,12 +197,12 @@ export default class DesktopForm extends Component {
             } else {
               this.set(this.state.values);
             }
-            message.success(res.response);
+            message.success(res.msg);
             if (typeof this.state.onSuccess === 'function') {
               this.state.onSuccess(res);
             }
           } else {
-            this.setError(res.response);
+            this.setErrorResponse(res.msg);
           }
         });
       }
@@ -1577,6 +1566,7 @@ export default class DesktopForm extends Component {
               defaultValue={this.state.values[item.field]}
               error={this.state.error}
               onChange={(result) => this.setField(item.field, result)}
+              onError={(error) => this.setErrorStatus(error)}
             />
           </Col>
         );
@@ -1607,16 +1597,16 @@ export default class DesktopForm extends Component {
           }
         </div>
         {
-          this.state.globalError.length > 0 &&
+          this.state.errorResponse.length > 0 &&
           <Row style={styles.formItem}>
             <Col {...DefaultCol[this.state.items[0].col || 0].label} className="myFormLabel">&nbsp;</Col>
             <Col {...DefaultCol[this.state.items[0].col || 0].item}>
               <Alert
-                message={this.state.globalError}
+                message={this.state.errorResponse}
                 type="error"
                 closable
                 afterClose={() => {
-                  this.setError('');
+                  this.setErrorResponse('');
                 }}
                 showIcon
               />
@@ -1637,8 +1627,8 @@ export default class DesktopForm extends Component {
                         <Button
                           key={idx}
                           type="primary"
-                          onClick={this.validateAllFormField}
-                          disabled={this.state.loading}
+                          onClick={this.formSubmit}
+                          disabled={this.state.loading || this.state.errorStatus === true}
                           loading={this.state.loading}
                         >
                           {op.label || I18n.tr('submit')}

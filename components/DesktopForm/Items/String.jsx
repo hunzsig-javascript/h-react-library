@@ -50,7 +50,7 @@ export default class String extends Component {
                 errorMessage: this.state.errorMessage,
               });
               onChange(this.formatter(evt));
-              onError(this.formatter(evt));
+              onError(this.state.errorMessage);
             }}
             {...item.params}
           />
