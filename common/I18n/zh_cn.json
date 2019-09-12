@@ -114,5 +114,6 @@
   "uploadSuccess": "上传成功",
   "wait": "稍后",
   "waitAMoment": "请稍等",
-  "yes": "是"
+  "yes": "是",
+  "isRequired": "必填"
 }

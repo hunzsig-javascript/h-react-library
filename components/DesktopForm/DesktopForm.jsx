@@ -29,7 +29,8 @@ import Api from '../../common/Api';
 
 import './DesktopForm.scss';
 import I18n from "../../common/I18n";
-import DesktopFormError from "./DesktopFormError";
+import ItemString from "./Items/String";
+import DefaultCol from "./Items/DefaultCol";
 
 const provincialJson = require('./../../assets/json/provincial').default;
 const municipalJson = require('./../../assets/json/municipal').default;
@@ -38,33 +39,6 @@ const regionJson = require('./../../assets/json/region').default;
 const {MonthPicker, YearPicker, RangePicker} = DatePicker;
 const TreeRoot = 'TREE';
 
-const defaultCol = {
-  0: {
-    label: {xxs: 5},
-    item: {xxs: 19},
-    rich: {xxs: 19},
-  },
-  1: {
-    label: {xxs: 6, xs: 5, s: 4, m: 3, l: 3, xl: 2},
-    item: {xxs: 18, xs: 19, s: 17, m: 14, l: 10, xl: 9},
-    rich: {xxs: 18, xs: 19, s: 19, m: 18, l: 17, xl: 16},
-  },
-  2: {
-    label: {xxs: 6, xs: 5, s: 4, m: 6, l: 6, xl: 4},
-    item: {xxs: 18, xs: 19, s: 17, m: 18, l: 18, xl: 16},
-    rich: {xxs: 18, xs: 19, s: 19, m: 18, l: 17, xl: 16},
-  },
-  3: {
-    label: {xxs: 6, xs: 5, s: 4, m: 6, l: 9, xl: 6},
-    item: {xxs: 18, xs: 19, s: 17, m: 18, l: 15, xl: 18},
-    rich: {xxs: 18, xs: 19, s: 19, m: 18, l: 17, xl: 16},
-  },
-  4: {
-    label: {xxs: 6, xs: 5, s: 4, m: 6, l: 9, xl: 8},
-    item: {xxs: 18, xs: 19, s: 17, m: 18, l: 15, xl: 16},
-    rich: {xxs: 18, xs: 19, s: 19, m: 18, l: 17, xl: 16},
-  },
-};
 export default class DesktopForm extends Component {
   static defaultProps = {};
 
@@ -184,45 +158,66 @@ export default class DesktopForm extends Component {
     });
   };
 
+  setField = (field, value) => {
+    this.state.values[field] = value;
+    this.setValues(this.state.values);
+  };
+
+  /**
+   * 验证器
+   */
   validateAllFormField = () => {
-    console.log(this.state.items);
-    return;
-    this.refs.form.validateAll((errors, values) => {
-      if (errors === null || errors === undefined) {
-        let v = JSON.parse(JSON.stringify(values));
-        if (typeof this.state.valueFormatter === 'function') {
-          v = this.state.valueFormatter(v);
-          if (typeof v === 'string') {
-            this.setError(v);
-            return;
+    let errorQty = 0;
+    this.state.items.forEach((item) => {
+      item.values.forEach((item) => {
+        console.log(this.state.values);
+        if (item.params && item.params.required) {
+          if (!this.state.values[item.field]) {
+            errorQty += 1;
+            this.state.error[item.field] = `${item.label} is required` + (new Date().getTime());
+          } else {
+            this.state.error[item.field] = '';
           }
         }
-        console.log('values', v);
-        if (typeof this.state.onSubmit === 'function') {
-          this.state.onSubmit(v);
-        }
-        if (this.state.scope !== null) {
-          this.setError('');
-          this.setLoading(true);
-          Api.real(this.state.scope, v, (res) => {
-            this.setLoading(false);
-            if (res.code === 200) {
-              if (this.state.refresh === true) {
-                this.reset();
-              } else {
-                this.set(values);
-              }
-              message.success(res.response);
-              if (typeof this.state.onSuccess === 'function') {
-                this.state.onSuccess(res);
-              }
-            } else {
-              this.setError(res.response);
-            }
-          });
+      });
+    });
+    this.setState({
+      error: this.state.error,
+    });
+    if (errorQty === 0) {
+      let v = JSON.parse(JSON.stringify(this.state.values));
+      if (typeof this.state.valueFormatter === 'function') {
+        v = this.state.valueFormatter(v);
+        if (typeof v === 'string') {
+          this.setError(v);
+          return;
         }
       }
-    });
+      console.log('values', v);
+      if (typeof this.state.onSubmit === 'function') {
+        this.state.onSubmit(v);
+      }
+      if (this.state.scope !== null) {
+        this.setError('');
+        this.setLoading(true);
+        Api.real(this.state.scope, v, (res) => {
+          this.setLoading(false);
+          if (res.code === 200) {
+            if (this.state.refresh === true) {
+              this.reset();
+            } else {
+              this.set(this.state.values);
+            }
+            message.success(res.response);
+            if (typeof this.state.onSuccess === 'function') {
+              this.state.onSuccess(res);
+            }
+          } else {
+            this.setError(res.response);
+          }
+        });
+      }
+    }
   };
 
   renderSuffix = (val) => {
@@ -474,13 +469,13 @@ export default class DesktopForm extends Component {
     return tpl;
   };
 
-  renderFormItem = (c, val, idx) => {
+  renderFormItem = (c, item, idx) => {
     c = c < 1 ? 0 : c;
-    c = val.col ? val.col : c;
+    c = item.col ? item.col : c;
     let tpl = null;
     let temp = null;
-    let map = val.map || [];
-    const required = val.params !== undefined && val.params.required !== undefined && val.params.required === true;
+    let map = item.map || [];
+    const required = item.params !== undefined && item.params.required !== undefined && item.params.required === true;
     const showSearch = map.length > 8;
     const align = 'center';
     const sizeIce = 'medium';
@@ -492,7 +487,7 @@ export default class DesktopForm extends Component {
       3: {xxs: 24, xs: 24, s: 24, m: 12, l: 8, xl: 8},
       4: {xxs: 24, xs: 24, s: 24, m: 12, l: 8, xl: 6},
     };
-    switch (val.type) {
+    switch (item.type) {
       case 'hidden':
         tpl = null;
         break;
@@ -502,12 +497,12 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formLabelStatic}>
-                {this.state.values[val.field]}
+              <Col {...DefaultCol[c].item} style={styles.formLabelStatic}>
+                {this.state.values[item.field]}
               </Col>
             </Row>
           </Col>
@@ -517,46 +512,46 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
-                <span>{I18n.tr('pleaseInput') + val.name}</span>
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
+                <span>{I18n.tr('pleaseInput') + item.name}</span>
                 <Input
                   style={{position: 'absolute', left: 0, top: 0, bottom: 0, right: 0, opacity: 0}}
-                  placeholder={I18n.tr('pleaseInput') + val.name}
-                  value={this.state.values[val.field]}
+                  placeholder={I18n.tr('pleaseInput') + item.name}
+                  value={this.state.values[item.field]}
                   readOnly={true}
-                  required={val.params && val.params.required ? val.params.required : false}
+                  required={item.params && item.params.required ? item.params.required : false}
                   onChange={(result) => {
-                    return this.binderValueFormatter(val, result);
+                    return this.binderValueFormatter(item, result);
                   }}
                 />
                 <div>
                   <Input.Search
-                    className={`fromItemWidth${c} ${val.type}`}
+                    className={`fromItemWidth${c} ${item.type}`}
                     size={size}
-                    placeholder={(val.params && val.params.placeholder) ? val.params.placeholder : `${I18n.tr('pleaseChooseByClick')}${val.name}`}
-                    defaultValue={this.state.values[val.field + '_shadow'] ? this.state.values[val.field + '_shadow'] : ''}
-                    ref={node => this.state.nodeShadow[val.field] = node}
+                    placeholder={(item.params && item.params.placeholder) ? item.params.placeholder : `${I18n.tr('pleaseChooseByClick')}${item.name}`}
+                    defaultValue={this.state.values[item.field + '_shadow'] ? this.state.values[item.field + '_shadow'] : ''}
+                    ref={node => this.state.nodeShadow[item.field] = node}
                     readOnly={true}
                     allowClear={true}
-                    enterButton={val.nameSub}
+                    enterButton={item.nameSub}
                     onSearch={() => {
-                      if (typeof val.onSearch === 'function') {
+                      if (typeof item.onSearch === 'function') {
                         const callback = (callbackData = undefined, callbackLabel = '') => {
-                          this.state.nodeShadow[val.field].input.input.value = callbackLabel;
-                          this.state.values[val.field] = callbackData;
+                          this.state.nodeShadow[item.field].input.input.value = callbackLabel;
+                          this.state.values[item.field] = callbackData;
                           this.formChange(this.state.values);
                         };
-                        val.onSearch(this.state.values[val.field], callback);
+                        item.onSearch(this.state.values[item.field], callback);
                       }
                     }}
-                    addonAfter={this.renderSearchRemove(val)}
+                    addonAfter={this.renderSearchRemove(item)}
                   />
                 </div>
-                <DesktopFormError message={this.state.error[val.field]}/>
+                <DesktopFormError message={this.state.error[item.field]}/>
               </Col>
             </Row>
           </Col>
@@ -566,21 +561,21 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={val.field} message={I18n.tr('pleaseInputRight') + val.name}
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
+                <IceFormBinder name={item.field} message={I18n.tr('pleaseInputRight') + item.name}
                                valueFormatter={(result) => {
-                                 return this.binderValueFormatter(val, result);
+                                 return this.binderValueFormatter(item, result);
                                }}>
                   <Input.TextArea
-                    className={`fromItemWidth${c} ${val.type}`}
+                    className={`fromItemWidth${c} ${item.type}`}
                     size={size}
-                    placeholder={I18n.tr('pleaseInput') + val.name}
-                    defaultValue={this.state.values[val.field]}
-                    {...val.params}
+                    placeholder={I18n.tr('pleaseInput') + item.name}
+                    defaultValue={this.state.values[item.field]}
+                    {...item.params}
                   />
                 </IceFormBinder>
                 <div style={{position: 'absolute', right: '5px', top: '5px'}}>
@@ -588,19 +583,19 @@ export default class DesktopForm extends Component {
                     type="dashed"
                     size="small"
                     onClick={() => {
-                      if (typeof val.onSearch === 'function') {
+                      if (typeof item.onSearch === 'function') {
                         const callback = (callbackData = undefined) => {
-                          this.state.values[val.field] = callbackData;
+                          this.state.values[item.field] = callbackData;
                           this.formChange(this.state.values);
                         };
-                        val.onSearch(this.state.values[val.field], callback);
+                        item.onSearch(this.state.values[item.field], callback);
                       }
                     }}
                   >
-                    {val.nameSub}
+                    {item.nameSub}
                   </Button>
                 </div>
-                <div><IceFormError name={val.field}/></div>
+                <div><IceFormError name={item.field}/></div>
               </Col>
             </Row>
           </Col>
@@ -611,28 +606,28 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={val.field} message={I18n.tr('pleaseInputRight') + val.name}
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
+                <IceFormBinder name={item.field} message={I18n.tr('pleaseInputRight') + item.name}
                                valueFormatter={(result) => {
-                                 return this.binderValueFormatter(val, result);
+                                 return this.binderValueFormatter(item, result);
                                }}>
                   <Input.TextArea
-                    className={`fromItemWidth${c} ${val.type}`}
+                    className={`fromItemWidth${c} ${item.type}`}
                     size={size}
-                    placeholder={I18n.tr('pleaseInput') + val.name}
-                    defaultValue={this.state.values[val.field]}
-                    ref={node => this.state.nodeShadow[val.field] = node}
-                    {...val.params}
+                    placeholder={I18n.tr('pleaseInput') + item.name}
+                    defaultValue={this.state.values[item.field]}
+                    ref={node => this.state.nodeShadow[item.field] = node}
+                    {...item.params}
                   />
                 </IceFormBinder>
                 <div style={{position: 'absolute', right: '15px', bottom: '-5px'}}>
-                  {this.renderSuffix(val)}
+                  {this.renderSuffix(item)}
                 </div>
-                <div><IceFormError name={val.field}/></div>
+                <div><IceFormError name={item.field}/></div>
               </Col>
             </Row>
           </Col>
@@ -642,17 +637,17 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
-                <Input.Group compact className={`fromItemWidth${c} ${val.type}`}>
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
+                <Input.Group compact className={`fromItemWidth${c} ${item.type}`}>
                   <Select
                     style={{width: '20%'}}
                     defaultValue=""
                     onChange={(value) => {
-                      this.state.values[val.field] = value;
+                      this.state.values[item.field] = value;
                       this.formChange(this.state.values);
                     }}
                   >
@@ -662,26 +657,26 @@ export default class DesktopForm extends Component {
                   </Select>
                   <IceFormBinder
                     type="url"
-                    name={val.field}
+                    name={item.field}
                     message={I18n.tr('URLFormat')}
                     valueFormatter={(result) => {
-                      return this.binderValueFormatter(val, result);
+                      return this.binderValueFormatter(item, result);
                     }}
                   >
                     <AutoComplete
                       style={{width: '80%'}}
                       size={size}
-                      placeholder={I18n.tr('pleaseInput') + val.name}
+                      placeholder={I18n.tr('pleaseInput') + item.name}
                       onChange={this.renderNet}
                       filterOption={false}
                       hasClear={true}
-                      {...val.params}
+                      {...item.params}
                     >
                       {this.state.renderNet}
                     </AutoComplete>
                   </IceFormBinder>
                 </Input.Group>
-                <div><IceFormError name={val.field}/></div>
+                <div><IceFormError name={item.field}/></div>
               </Col>
             </Row>
           </Col>
@@ -691,28 +686,28 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={val.field} type="email" message={I18n.tr('pleaseInputRight') + val.name}
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
+                <IceFormBinder name={item.field} type="email" message={I18n.tr('pleaseInputRight') + item.name}
                                valueFormatter={(result) => {
-                                 return this.binderValueFormatter(val, result);
+                                 return this.binderValueFormatter(item, result);
                                }}>
                   <AutoComplete
-                    className={`fromItemWidth${c} ${val.type}`}
+                    className={`fromItemWidth${c} ${item.type}`}
                     size={size}
-                    placeholder={I18n.tr('pleaseInput') + val.name}
+                    placeholder={I18n.tr('pleaseInput') + item.name}
                     onChange={this.renderEmail}
                     filterOption={false}
                     hasClear={true}
-                    {...val.params}
+                    {...item.params}
                   >
                     {this.state.renderEmail}
                   </AutoComplete>
                 </IceFormBinder>
-                <div><IceFormError name={val.field}/></div>
+                <div><IceFormError name={item.field}/></div>
               </Col>
             </Row>
           </Col>
@@ -723,22 +718,22 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="hex" name={val.field} message={I18n.tr('pleaseInputRightCode')}
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
+                <IceFormBinder type="hex" name={item.field} message={I18n.tr('pleaseInputRightCode')}
                                valueFormatter={(result) => {
-                                 return this.binderValueFormatter(val, result);
+                                 return this.binderValueFormatter(item, result);
                                }}>
                   <CompactPicker
-                    className={`fromItemWidth${c} ${val.type}`}
-                    {...val.params}
-                    color={this.state.values[val.field]}
+                    className={`fromItemWidth${c} ${item.type}`}
+                    {...item.params}
+                    color={this.state.values[item.field]}
                   />
                 </IceFormBinder>
-                <div><IceFormError name={val.field}/></div>
+                <div><IceFormError name={item.field}/></div>
               </Col>
             </Row>
           </Col>
@@ -749,27 +744,27 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="string" name={val.field} message={I18n.tr('pleaseInput') + val.name}
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
+                <IceFormBinder type="string" name={item.field} message={I18n.tr('pleaseInput') + item.name}
                                valueFormatter={(result) => {
-                                 return this.binderValueFormatter(val, result);
+                                 return this.binderValueFormatter(item, result);
                                }}>
                   <Input.Password
-                    className={`fromItemWidth${c} ${val.type}`}
+                    className={`fromItemWidth${c} ${item.type}`}
                     type="password"
                     size={size}
-                    placeholder={I18n.tr('pleaseInput') + val.name}
+                    placeholder={I18n.tr('pleaseInput') + item.name}
                     allowClear={true}
-                    ref={node => this.state.nodeShadow[val.field] = node}
-                    defaultValue={this.state.values[val.field]}
-                    {...val.params}
+                    ref={node => this.state.nodeShadow[item.field] = node}
+                    defaultValue={this.state.values[item.field]}
+                    {...item.params}
                   />
                 </IceFormBinder>
-                <div><IceFormError name={val.field}/></div>
+                <div><IceFormError name={item.field}/></div>
               </Col>
             </Row>
           </Col>
@@ -780,26 +775,26 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={val.field} validator={this.checkNumber} valueFormatter={(result) => {
-                  return this.binderValueFormatter(val, result);
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
+                <IceFormBinder name={item.field} validator={this.checkNumber} valueFormatter={(result) => {
+                  return this.binderValueFormatter(item, result);
                 }}>
                   <Input
-                    className={`fromItemWidth${c} ${val.type}`}
+                    className={`fromItemWidth${c} ${item.type}`}
                     size={size}
-                    placeholder={I18n.tr('pleaseInput') + val.name}
+                    placeholder={I18n.tr('pleaseInput') + item.name}
                     allowClear={true}
-                    ref={node => this.state.nodeShadow[val.field] = node}
-                    defaultValue={this.state.values[val.field]}
-                    {...val.params}
+                    ref={node => this.state.nodeShadow[item.field] = node}
+                    defaultValue={this.state.values[item.field]}
+                    {...item.params}
                   />
                 </IceFormBinder>
-                {(this.state.values[val.field] > 0 || this.state.values[val.field] < 0) &&
-                <IceFormError name={val.field} style={{whiteSpace: 'nowrap'}}/>}
+                {(this.state.values[item.field] > 0 || this.state.values[item.field] < 0) &&
+                <IceFormError name={item.field} style={{whiteSpace: 'nowrap'}}/>}
               </Col>
             </Row>
           </Col>
@@ -810,26 +805,26 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={val.field} validator={this.checkInteger} valueFormatter={(result) => {
-                  return this.binderValueFormatter(val, result);
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
+                <IceFormBinder name={item.field} validator={this.checkInteger} valueFormatter={(result) => {
+                  return this.binderValueFormatter(item, result);
                 }}>
                   <Input
-                    className={`fromItemWidth${c} ${val.type}`}
+                    className={`fromItemWidth${c} ${item.type}`}
                     size={size}
-                    placeholder={I18n.tr('pleaseInput') + val.name}
+                    placeholder={I18n.tr('pleaseInput') + item.name}
                     allowClear={true}
-                    ref={node => this.state.nodeShadow[val.field] = node}
-                    defaultValue={this.state.values[val.field]}
-                    {...val.params}
+                    ref={node => this.state.nodeShadow[item.field] = node}
+                    defaultValue={this.state.values[item.field]}
+                    {...item.params}
                   />
                 </IceFormBinder>
-                {(this.state.values[val.field] > 0 || this.state.values[val.field] < 0) &&
-                <IceFormError name={val.field} style={{whiteSpace: 'nowrap'}}/>}
+                {(this.state.values[item.field] > 0 || this.state.values[item.field] < 0) &&
+                <IceFormError name={item.field} style={{whiteSpace: 'nowrap'}}/>}
               </Col>
             </Row>
           </Col>
@@ -839,20 +834,20 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={val.field} message={I18n.tr('pleaseChoose') + val.name}>
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
+                <IceFormBinder name={item.field} message={I18n.tr('pleaseChoose') + item.name}>
                   <Switch
-                    className={`fromItemWidth${c} ${val.type}`}
+                    className={`fromItemWidth${c} ${item.type}`}
                     size={size}
-                    defaultChecked={this.state.values[val.field]}
-                    {...val.params}
+                    defaultChecked={this.state.values[item.field]}
+                    {...item.params}
                   />
                 </IceFormBinder>
-                <div><IceFormError name={val.field}/></div>
+                <div><IceFormError name={item.field}/></div>
               </Col>
             </Row>
           </Col>
@@ -862,24 +857,24 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type={val.binderType || 'string'} name={val.field}
-                               message={I18n.tr('pleaseChoose') + val.name} valueFormatter={(e) => {
-                  return this.binderValueFormatter(val, e);
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
+                <IceFormBinder type={item.binderType || 'string'} name={item.field}
+                               message={I18n.tr('pleaseChoose') + item.name} valueFormatter={(e) => {
+                  return this.binderValueFormatter(item, e);
                 }}>
                   <Radio.Group
                     defaultValue={this.state.value}
-                    className={`fromItemWidth${c} ${val.type}`}
+                    className={`fromItemWidth${c} ${item.type}`}
                     size={size}
                     options={map}
-                    checked={this.state.values[val.field]}
+                    checked={this.state.values[item.field]}
                   />
                 </IceFormBinder>
-                <div><IceFormError name={val.field}/></div>
+                <div><IceFormError name={item.field}/></div>
               </Col>
             </Row>
           </Col>
@@ -889,20 +884,20 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="array" name={val.field} message={I18n.tr('pleaseChoose') + val.name}>
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
+                <IceFormBinder type="array" name={item.field} message={I18n.tr('pleaseChoose') + item.name}>
                   <Checkbox.Group
-                    className={`fromItemWidth${c} ${val.type}`}
+                    className={`fromItemWidth${c} ${item.type}`}
                     defaultValue={this.state.value}
                     dataSource={map}
-                    {...val.params}
+                    {...item.params}
                   />
                 </IceFormBinder>
-                <div><IceFormError name={val.field}/></div>
+                <div><IceFormError name={item.field}/></div>
               </Col>
             </Row>
           </Col>
@@ -912,16 +907,16 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="array" name={val.field} message={I18n.tr('pleaseChoose') + val.name}>
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
+                <IceFormBinder type="array" name={item.field} message={I18n.tr('pleaseChoose') + item.name}>
                   <Checkbox.Group
-                    className={`fromItemWidth${c} ${val.type}`}
+                    className={`fromItemWidth${c} ${item.type}`}
                     defaultValue={this.state.value || []}
-                    {...val.params}
+                    {...item.params}
                   >
                     {
                       [true].map((x, cbcIdx1) => {
@@ -934,9 +929,9 @@ export default class DesktopForm extends Component {
                                     key={cbcIdx2}
                                     {...{
                                       xxs: 24,
-                                      xs: Math.max(val.checkboxCol || 12),
-                                      s: Math.max(val.checkboxCol || 12),
-                                      m: Math.max(val.checkboxCol || 8)
+                                      xs: Math.max(item.checkboxCol || 12),
+                                      s: Math.max(item.checkboxCol || 12),
+                                      m: Math.max(item.checkboxCol || 8)
                                     }}
                                   >
                                     <Checkbox key={cb.value} value={cb.value}>{cb.label}</Checkbox>
@@ -950,7 +945,7 @@ export default class DesktopForm extends Component {
                     }
                   </Checkbox.Group>
                 </IceFormBinder>
-                <div><IceFormError name={val.field}/></div>
+                <div><IceFormError name={item.field}/></div>
               </Col>
             </Row>
           </Col>
@@ -960,17 +955,17 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="number" name={val.field}>
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
+                <IceFormBinder type="number" name={item.field}>
                   <Rating
-                    className={`fromItemWidth${c} ${val.type}`}
+                    className={`fromItemWidth${c} ${item.type}`}
                     size={size}
-                    defaultValue={this.state.values[val.field]}
-                    {...val.params}
+                    defaultValue={this.state.values[item.field]}
+                    {...item.params}
                   />
                 </IceFormBinder>
               </Col>
@@ -982,27 +977,27 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type={val.binderType || 'string'} name={val.field}
-                               message={I18n.tr('pleaseChoose') + val.name}>
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
+                <IceFormBinder type={item.binderType || 'string'} name={item.field}
+                               message={I18n.tr('pleaseChoose') + item.name}>
                   <Select
                     allowClear={!required}
                     showSearch={showSearch}
-                    className={`fromItemWidth${c} ${val.type}`}
+                    className={`fromItemWidth${c} ${item.type}`}
                     size={size}
-                    placeholder={I18n.tr('pleaseChoose') + val.name}
-                    defaultValue={this.state.values[val.field]}
+                    placeholder={I18n.tr('pleaseChoose') + item.name}
+                    defaultValue={this.state.values[item.field]}
                     filterOption={(input, option) => {
                       if (option.props.disabled === true) return false;
                       else if (option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0) return true;
                       else if (`${option.props.value}`.indexOf(input) >= 0) return true;
                       return false;
                     }}
-                    {...val.params}
+                    {...item.params}
                   >
                     {map.map((m) => {
                       return <Select.Option key={m.value} value={m.value}
@@ -1010,7 +1005,7 @@ export default class DesktopForm extends Component {
                     })}
                   </Select>
                 </IceFormBinder>
-                <div><IceFormError name={val.field}/></div>
+                <div><IceFormError name={item.field}/></div>
               </Col>
             </Row>
           </Col>
@@ -1020,29 +1015,29 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type={val.binderType || 'array'} name={val.field}
-                               message={I18n.tr('pleaseChoose') + val.name} valueFormatter={(v1, v2) => {
-                  return this.binderValueFormatter(val, v1, v2);
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
+                <IceFormBinder type={item.binderType || 'array'} name={item.field}
+                               message={I18n.tr('pleaseChoose') + item.name} valueFormatter={(v1, v2) => {
+                  return this.binderValueFormatter(item, v1, v2);
                 }}>
                   <Cascader
                     style={{textAlign: 'left'}}
-                    className={`fromItemWidth${c} ${val.type}`}
+                    className={`fromItemWidth${c} ${item.type}`}
                     size={size}
-                    placeholder={I18n.tr('pleaseChoose') + val.name}
-                    defaultValue={this.state.values[val.field]}
-                    options={val.map}
+                    placeholder={I18n.tr('pleaseChoose') + item.name}
+                    defaultValue={this.state.values[item.field]}
+                    options={item.map}
                     showSearch={(inputValue, path) => {
                       return (path.some(option => (option.label).toLowerCase().indexOf(inputValue.toLowerCase()) > -1));
                     }}
-                    {...val.params}
+                    {...item.params}
                   />
                 </IceFormBinder>
-                <div><IceFormError name={val.field}/></div>
+                <div><IceFormError name={item.field}/></div>
               </Col>
             </Row>
           </Col>
@@ -1052,14 +1047,14 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="array" name={val.field} message={I18n.tr('pleaseChoose') + val.name}
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
+                <IceFormBinder type="array" name={item.field} message={I18n.tr('pleaseChoose') + item.name}
                                valueFormatter={(v1, v2) => {
-                                 return this.binderValueFormatter(val, v1, v2);
+                                 return this.binderValueFormatter(item, v1, v2);
                                }}>
                   {
                     regionJson &&
@@ -1067,17 +1062,17 @@ export default class DesktopForm extends Component {
                       expandTrigger="hover"
                       size={size}
                       options={regionJson}
-                      defaultValue={this.state.values[val.field]}
+                      defaultValue={this.state.values[item.field]}
                       allowClear={true}
-                      placeholder={I18n.tr('pleaseChoose') + val.name}
+                      placeholder={I18n.tr('pleaseChoose') + item.name}
                       showSearch={(inputValue, path) => {
                         return (path.some(option => (option.label).toLowerCase().indexOf(inputValue.toLowerCase()) > -1));
                       }}
-                      {...val.params}
+                      {...item.params}
                     />
                   }
                 </IceFormBinder>
-                <div><IceFormError name={val.field}/></div>
+                <div><IceFormError name={item.field}/></div>
               </Col>
             </Row>
           </Col>
@@ -1087,14 +1082,14 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="array" name={val.field} message={I18n.tr('pleaseChoose') + val.name}
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
+                <IceFormBinder type="array" name={item.field} message={I18n.tr('pleaseChoose') + item.name}
                                valueFormatter={(v1, v2) => {
-                                 return this.binderValueFormatter(val, v1, v2);
+                                 return this.binderValueFormatter(item, v1, v2);
                                }}>
                   {
                     provincialJson &&
@@ -1102,17 +1097,17 @@ export default class DesktopForm extends Component {
                       expandTrigger="hover"
                       size={size}
                       options={provincialJson}
-                      defaultValue={this.state.values[val.field]}
+                      defaultValue={this.state.values[item.field]}
                       allowClear={true}
-                      placeholder={I18n.tr('pleaseChoose') + val.name}
+                      placeholder={I18n.tr('pleaseChoose') + item.name}
                       showSearch={(inputValue, path) => {
                         return (path.some(option => (option.label).toLowerCase().indexOf(inputValue.toLowerCase()) > -1));
                       }}
-                      {...val.params}
+                      {...item.params}
                     />
                   }
                 </IceFormBinder>
-                <div><IceFormError name={val.field}/></div>
+                <div><IceFormError name={item.field}/></div>
               </Col>
             </Row>
           </Col>
@@ -1122,14 +1117,14 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="array" name={val.field} message={I18n.tr('pleaseChoose') + val.name}
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
+                <IceFormBinder type="array" name={item.field} message={I18n.tr('pleaseChoose') + item.name}
                                valueFormatter={(v1, v2) => {
-                                 return this.binderValueFormatter(val, v1, v2);
+                                 return this.binderValueFormatter(item, v1, v2);
                                }}>
                   {
                     municipalJson &&
@@ -1137,17 +1132,17 @@ export default class DesktopForm extends Component {
                       expandTrigger="hover"
                       size={size}
                       options={municipalJson}
-                      defaultValue={this.state.values[val.field]}
+                      defaultValue={this.state.values[item.field]}
                       allowClear={true}
-                      placeholder={I18n.tr('pleaseChoose') + val.name}
+                      placeholder={I18n.tr('pleaseChoose') + item.name}
                       showSearch={(inputValue, path) => {
                         return (path.some(option => (option.label).toLowerCase().indexOf(inputValue.toLowerCase()) > -1));
                       }}
-                      {...val.params}
+                      {...item.params}
                     />
                   }
                 </IceFormBinder>
-                <div><IceFormError name={val.field}/></div>
+                <div><IceFormError name={item.field}/></div>
               </Col>
             </Row>
           </Col>
@@ -1157,20 +1152,20 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="array" name={val.field}
-                               message={I18n.tr('pleaseChoose') + val.name + I18n.tr('range')}>
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
+                <IceFormBinder type="array" name={item.field}
+                               message={I18n.tr('pleaseChoose') + item.name + I18n.tr('range')}>
                   <Range
-                    className={`fromItemWidth${c} ${val.type}`}
+                    className={`fromItemWidth${c} ${item.type}`}
                     size={size}
-                    defaultValue={this.state.values[val.field]}
+                    defaultValue={this.state.values[item.field]}
                   />
                 </IceFormBinder>
-                <div><IceFormError name={val.field}/></div>
+                <div><IceFormError name={item.field}/></div>
               </Col>
             </Row>
           </Col>
@@ -1180,25 +1175,25 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={val.field} message={I18n.tr('pleaseChoose') + val.name}
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
+                <IceFormBinder name={item.field} message={I18n.tr('pleaseChoose') + item.name}
                                valueFormatter={(date, dateStr) => {
-                                 return this.binderValueFormatter(val, date, dateStr);
+                                 return this.binderValueFormatter(item, date, dateStr);
                                }}>
                   <DatePicker
-                    className={`fromItemWidth${c} ${val.type}`}
+                    className={`fromItemWidth${c} ${item.type}`}
                     size={sizeIce}
-                    defaultValue={this.state.values[val.field]}
+                    defaultValue={this.state.values[item.field]}
                     showTime={true}
                     formater={['YYYY-MM-DD', 'HH:mm:ss']}
-                    {...val.params}
+                    {...item.params}
                   />
                 </IceFormBinder>
-                <div><IceFormError name={val.field}/></div>
+                <div><IceFormError name={item.field}/></div>
               </Col>
             </Row>
           </Col>
@@ -1208,24 +1203,24 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={val.field} message={I18n.tr('pleaseChoose') + val.name}
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
+                <IceFormBinder name={item.field} message={I18n.tr('pleaseChoose') + item.name}
                                valueFormatter={(date, dateStr) => {
-                                 return this.binderValueFormatter(val, date, dateStr);
+                                 return this.binderValueFormatter(item, date, dateStr);
                                }}>
                   <DatePicker
-                    className={`fromItemWidth${c} ${val.type}`}
+                    className={`fromItemWidth${c} ${item.type}`}
                     size={sizeIce}
-                    defaultValue={this.state.values[val.field]}
+                    defaultValue={this.state.values[item.field]}
                     formater={['YYYY-MM-DD']}
-                    {...val.params}
+                    {...item.params}
                   />
                 </IceFormBinder>
-                <div><IceFormError name={val.field}/></div>
+                <div><IceFormError name={item.field}/></div>
               </Col>
             </Row>
           </Col>
@@ -1235,24 +1230,24 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={val.field} message={I18n.tr('pleaseChoose') + val.name}
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
+                <IceFormBinder name={item.field} message={I18n.tr('pleaseChoose') + item.name}
                                valueFormatter={(date, dateStr) => {
-                                 return this.binderValueFormatter(val, date, dateStr);
+                                 return this.binderValueFormatter(item, date, dateStr);
                                }}>
                   <TimePicker
-                    className={`fromItemWidth${c} ${val.type}`}
+                    className={`fromItemWidth${c} ${item.type}`}
                     size={sizeIce}
-                    defaultValue={this.state.values[val.field]}
+                    defaultValue={this.state.values[item.field]}
                     formater={['HH:mm:ss']}
-                    {...val.params}
+                    {...item.params}
                   />
                 </IceFormBinder>
-                <div><IceFormError name={val.field}/></div>
+                <div><IceFormError name={item.field}/></div>
               </Col>
             </Row>
           </Col>
@@ -1262,24 +1257,24 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={val.field} message={I18n.tr('pleaseChoose') + val.name}
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
+                <IceFormBinder name={item.field} message={I18n.tr('pleaseChoose') + item.name}
                                valueFormatter={(date, dateStr) => {
-                                 return this.binderValueFormatter(val, date, dateStr);
+                                 return this.binderValueFormatter(item, date, dateStr);
                                }}>
                   <YearPicker
-                    className={`fromItemWidth${c} ${val.type}`}
+                    className={`fromItemWidth${c} ${item.type}`}
                     size={sizeIce}
-                    defaultValue={this.state.values[val.field]}
+                    defaultValue={this.state.values[item.field]}
                     formater={['YYYY']}
-                    {...val.params}
+                    {...item.params}
                   />
                 </IceFormBinder>
-                <div><IceFormError name={val.field}/></div>
+                <div><IceFormError name={item.field}/></div>
               </Col>
             </Row>
           </Col>
@@ -1289,24 +1284,24 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={val.field} message={I18n.tr('pleaseChoose') + val.name}
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
+                <IceFormBinder name={item.field} message={I18n.tr('pleaseChoose') + item.name}
                                valueFormatter={(date, dateStr) => {
-                                 return this.binderValueFormatter(val, date, dateStr);
+                                 return this.binderValueFormatter(item, date, dateStr);
                                }}>
                   <MonthPicker
-                    className={`fromItemWidth${c} ${val.type}`}
+                    className={`fromItemWidth${c} ${item.type}`}
                     size={sizeIce}
-                    defaultValue={this.state.values[val.field]}
+                    defaultValue={this.state.values[item.field]}
                     formater={['YYYY-MM']}
-                    {...val.params}
+                    {...item.params}
                   />
                 </IceFormBinder>
-                <div><IceFormError name={val.field}/></div>
+                <div><IceFormError name={item.field}/></div>
               </Col>
             </Row>
           </Col>
@@ -1316,30 +1311,30 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
                 <IceFormBinder
                   type="array"
-                  name={val.field}
-                  message={I18n.tr('pleaseChoose') + val.name + I18n.tr('range')}
+                  name={item.field}
+                  message={I18n.tr('pleaseChoose') + item.name + I18n.tr('range')}
                   valueFormatter={(date, dateStr) => {
-                    return this.binderValueFormatter(val, date, dateStr);
+                    return this.binderValueFormatter(item, date, dateStr);
                   }}
                 >
                   <RangePicker
-                    className={`fromItemWidth${c} ${val.type}`}
+                    className={`fromItemWidth${c} ${item.type}`}
                     style={{backgroundColor: 'transparent', border: '1px solid #E0E0E0'}}
                     size={sizeIce}
-                    defaultValue={this.state.values[val.field]}
+                    defaultValue={this.state.values[item.field]}
                     showTime={true}
                     formater={['YYYY-MM-DD', 'HH:mm:ss']}
-                    {...val.params}
+                    {...item.params}
                   />
                 </IceFormBinder>
-                <div><IceFormError name={val.field}/></div>
+                <div><IceFormError name={item.field}/></div>
               </Col>
             </Row>
           </Col>
@@ -1349,29 +1344,29 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
                 <IceFormBinder
                   type="array"
-                  name={val.field}
-                  message={I18n.tr('pleaseChoose') + val.name + I18n.tr('range')}
+                  name={item.field}
+                  message={I18n.tr('pleaseChoose') + item.name + I18n.tr('range')}
                   valueFormatter={(date, dateStr) => {
-                    return this.binderValueFormatter(val, date, dateStr);
+                    return this.binderValueFormatter(item, date, dateStr);
                   }}
                 >
                   <RangePicker
-                    className={`fromItemWidth${c} ${val.type}`}
+                    className={`fromItemWidth${c} ${item.type}`}
                     style={{backgroundColor: 'transparent', border: '1px solid #E0E0E0'}}
                     size={sizeIce}
-                    defaultValue={this.state.values[val.field]}
+                    defaultValue={this.state.values[item.field]}
                     formater={['YYYY-MM-DD']}
-                    {...val.params}
+                    {...item.params}
                   />
                 </IceFormBinder>
-                <div><IceFormError name={val.field}/></div>
+                <div><IceFormError name={item.field}/></div>
               </Col>
             </Row>
           </Col>
@@ -1384,22 +1379,22 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
                 <Hoss
                   col={c}
-                  val={val}
-                  className={`fromItemWidth${c} ${val.type}`}
-                  defaultFileList={this.state.values[val.field]}
+                  item={item}
+                  className={`fromItemWidth${c} ${item.type}`}
+                  defaultFileList={this.state.values[item.field]}
                   setValue={(values) => {
-                    this.state.values[val.field] = values;
+                    this.state.values[item.field] = values;
                     this.formChange(this.state.values);
                   }}
                 />
-                <div><IceFormError name={val.field}/></div>
+                <div><IceFormError name={item.field}/></div>
               </Col>
             </Row>
           </Col>
@@ -1413,16 +1408,16 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon} />}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon} />}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
                 <Alioss
                   col={c}
-                  val={val}
-                  className={`fromItemWidth${c} ${val.type}`}
-                  defaultFileList={this.state.values[val.field] || []}
+                  item={item}
+                  className={`fromItemWidth${c} ${item.type}`}
+                  defaultFileList={this.state.values[item.field] || []}
                 />
               </Col>
             </Row>
@@ -1437,8 +1432,8 @@ export default class DesktopForm extends Component {
           label: I18n.tr('chooseAll'),
           children: JSON.parse(JSON.stringify(map)),
         }];
-        if (Array.isArray(val.value)) {
-          temp = JSON.parse(JSON.stringify(val.value));
+        if (Array.isArray(item.value)) {
+          temp = JSON.parse(JSON.stringify(item.value));
           temp.forEach((treev, treeidx) => {
             temp[treeidx] = TreeRoot + '-' + treev;
           });
@@ -1448,12 +1443,12 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="array" name={val.field}>
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
+                <IceFormBinder type="array" name={item.field}>
                   <Tree
                     defaultExpandAll
                     multiple
@@ -1468,14 +1463,14 @@ export default class DesktopForm extends Component {
                           nckData.push(nck);
                         }
                       });
-                      this.state.values[val.field] = nckData;
+                      this.state.values[item.field] = nckData;
                       this.formChange(this.state.values);
                     }}
                   >
                     {this.renderTree(map)}
                   </Tree>
                 </IceFormBinder>
-                <div><IceFormError name={val.field}/></div>
+                <div><IceFormError name={item.field}/></div>
               </Col>
             </Row>
           </Col>
@@ -1485,25 +1480,25 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="array" name={val.field} message={I18n.tr('pleaseChoose') + val.name}>
+              <Col {...DefaultCol[c].item} style={styles.formItem}>
+                <IceFormBinder type="array" name={item.field} message={I18n.tr('pleaseChoose') + item.name}>
                   <TreeSelect
                     showSearch
                     allowClear
                     treeDefaultExpandAll
-                    defaultValue={val.value}
-                    treeCheckable={val.treeCheckable === undefined ? true : false}
+                    defaultValue={item.value}
+                    treeCheckable={item.treeCheckable === undefined ? true : false}
                     showCheckedStrategy={TreeSelect.SHOW_PARENT}
-                    className={`fromItemWidth${c} ${val.type}`}
+                    className={`fromItemWidth${c} ${item.type}`}
                     size={size}
-                    placeholder={I18n.tr('pleaseChoose') + val.name}
-                    searchPlaceholder={I18n.tr('pleaseChoose') + val.name}
+                    placeholder={I18n.tr('pleaseChoose') + item.name}
+                    searchPlaceholder={I18n.tr('pleaseChoose') + item.name}
                     multiple
-                    defaultCheckedKeys={val.value || []}
+                    defaultCheckedKeys={item.value || []}
                     onChange={(checkKeys) => {
                       const ckData = JSON.parse(JSON.stringify(checkKeys));
                       const nckData = [];
@@ -1513,15 +1508,15 @@ export default class DesktopForm extends Component {
                           nckData.push(nck);
                         }
                       });
-                      this.state.values[val.field] = nckData;
+                      this.state.values[item.field] = nckData;
                       this.formChange(this.state.values);
                     }}
-                    {...val.params}
+                    {...item.params}
                   >
                     {this.renderTreeSelect(map)}
                   </TreeSelect>
                 </IceFormBinder>
-                <div><IceFormError name={val.field}/></div>
+                <div><IceFormError name={item.field}/></div>
               </Col>
             </Row>
           </Col>
@@ -1531,14 +1526,14 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
+              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
+                {item.icon && <Icon className="myIcon" type={item.icon}/>}
+                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
-              <Col {...defaultCol[c].rich} style={styles.formRich}>
+              <Col {...DefaultCol[c].rich} style={styles.formRich}>
                 <ReactQuill
                   readOnly={false}
-                  defaultValue={this.state.values[val.field] || ''}
+                  defaultValue={this.state.values[item.field] || ''}
                   modules={{
                     toolbar: [
                       ['clean'],
@@ -1560,7 +1555,7 @@ export default class DesktopForm extends Component {
                     ],
                   }}
                   onChange={(string) => {
-                    this.state.values[val.field] = string;
+                    this.state.values[item.field] = string;
                     this.formChange(this.state.values);
                   }}
                 />
@@ -1574,27 +1569,15 @@ export default class DesktopForm extends Component {
       default:
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row>
-              <Col {...defaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {val.icon && <Icon className="myIcon" type={val.icon}/>}
-                {val.name && val.name.length > 0 && <label>{val.name}：</label>}
-              </Col>
-              <Col {...defaultCol[c].item} style={styles.formItem}>
-                <Input
-                  className={val.type ? `fromItemWidth${c} ${val.type}` : `fromItemWidth${c} str`}
-                  size={size}
-                  allowClear={true}
-                  placeholder={I18n.tr('pleaseInput') + val.name}
-                  ref={node => this.state.nodeShadow[val.field] = node}
-                  defaultValue={this.state.values[val.field]}
-                  onChange={(result) => {
-                    return this.binderValueFormatter(val, result);
-                  }}
-                  {...val.params}
-                />
-                <DesktopFormError message={this.state.error[val.field]}/>
-              </Col>
-            </Row>
+            <ItemString
+              required={required}
+              item={item}
+              size={size}
+              col={c}
+              defaultValue={this.state.values[item.field]}
+              error={this.state.error}
+              onChange={(result) => this.setField(item.field, result)}
+            />
           </Col>
         );
         break;
@@ -1626,8 +1609,8 @@ export default class DesktopForm extends Component {
         {
           this.state.globalError.length > 0 &&
           <Row style={styles.formItem}>
-            <Col {...defaultCol[this.state.items[0].col || 0].label} className="myFormLabel">&nbsp;</Col>
-            <Col {...defaultCol[this.state.items[0].col || 0].item}>
+            <Col {...DefaultCol[this.state.items[0].col || 0].label} className="myFormLabel">&nbsp;</Col>
+            <Col {...DefaultCol[this.state.items[0].col || 0].item}>
               <Alert
                 message={this.state.globalError}
                 type="error"
@@ -1643,8 +1626,8 @@ export default class DesktopForm extends Component {
         {
           this.state.operation !== undefined && this.state.operation.length > 0 &&
           <Row>
-            <Col {...defaultCol[this.state.items[0].col || 0].label} className="myFormLabel">&nbsp;</Col>
-            <Col {...defaultCol[this.state.items[0].col || 0].item} style={{textAlign: this.state.align}}>
+            <Col {...DefaultCol[this.state.items[0].col || 0].label} className="myFormLabel">&nbsp;</Col>
+            <Col {...DefaultCol[this.state.items[0].col || 0].item} style={{textAlign: this.state.align}}>
               {
                 this.state.operation.map((op, idx) => {
                   let optpl = null;

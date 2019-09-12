@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 
-export default class DesktopFormError extends Component {
+import './Error.scss';
+
+export default class Error extends Component {
   static defaultProps = {};
 
   constructor(props) {
@@ -15,15 +17,14 @@ export default class DesktopFormError extends Component {
       return '';
     }
     return (
-      <div style={styles.error}>
-        {this.props.message}
-      </div>
+      <div className="errorMessage" dangerouslySetInnerHTML={{__html: this.props.message}}/>
     );
   }
 }
 
 const styles = {
   error: {
+    textAlign: 'left',
     color: '#e04240'
   }
 };

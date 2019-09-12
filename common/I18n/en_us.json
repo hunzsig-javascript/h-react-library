@@ -114,5 +114,6 @@
   "uploadSuccess": "upload success",
   "wait": "wait",
   "waitAMoment": "Wait a moment",
-  "yes": "yes"
+  "yes": "yes",
+  "isRequired": "is required"
 }

@@ -1,0 +1,42 @@
+@charset "UTF-8";
+
+.ItemInput {
+
+  .icon {
+    margin-right: 3px;
+  }
+
+  .label{
+    height: 32px;
+    line-height: 32px;
+    text-align: right;
+    word-break: break-all;
+  }
+  .label.required{
+    color: #ff6d74;
+  }
+
+  .scope{
+
+    position: relative;
+    min-height: 32px;
+    line-height: 32px;
+    margin-bottom: 15px;
+
+    .error > input{
+      border: 1px solid #ff6d74;
+    }
+
+    .col0 { width: 100% }
+    .col1.string { width: 100% }
+    .col2.string { width: 100% }
+    .col3.string { width: 100% }
+    .col4.string { width: 100% }
+
+    @media (min-width: 1200px) {
+      .col1.string { width: 90% }
+    }
+  }
+
+
+}
