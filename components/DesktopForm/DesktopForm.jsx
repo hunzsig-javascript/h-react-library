@@ -29,6 +29,7 @@ import Api from '../../common/Api';
 
 import './DesktopForm.scss';
 import I18n from "../../common/I18n";
+import ItemConst from "./Items/Const";
 import ItemString from "./Items/String";
 import DefaultCol from "./Items/DefaultCol";
 
@@ -480,20 +481,17 @@ export default class DesktopForm extends Component {
       case 'hidden':
         tpl = null;
         break;
+      case 'const':
       case 'label':
       case 'static':
-      case 'const':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row>
-              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {item.icon && <Icon className="myIcon" type={item.icon}/>}
-                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
-              </Col>
-              <Col {...DefaultCol[c].item} style={styles.formLabelStatic}>
-                {this.state.values[item.field]}
-              </Col>
-            </Row>
+            <ItemConst
+              required={required}
+              item={item}
+              col={c}
+              defaultValue={this.state.values[item.field]}
+            />
           </Col>
         );
         break;
@@ -1564,7 +1562,6 @@ export default class DesktopForm extends Component {
               size={size}
               col={c}
               defaultValue={this.state.values[item.field]}
-              error={this.state.error}
               onChange={(result) => this.setField(item.field, result)}
               onError={(error) => this.setErrorStatus(error)}
             />
