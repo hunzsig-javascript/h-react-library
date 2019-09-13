@@ -29,8 +29,8 @@ export default class Const extends Component {
           {item.icon && <Icon className="icon" type={item.icon}/>}
           {item.label && item.label.length > 0 && <label>{item.label}：</label>}
         </Col>
-        <Col {...DefaultCol[col].item} className={className}>
-          {defaultValue}
+        <Col className="scope" {...DefaultCol[col].item}>
+          <div className={className}>{defaultValue}</div>
         </Col>
       </Row>
     );
