@@ -31,6 +31,7 @@ import './DesktopForm.scss';
 import I18n from "../../common/I18n";
 import ItemConst from "./Items/Const";
 import ItemString from "./Items/String";
+import ItemPassword from "./Items/Password";
 import DefaultCol from "./Items/DefaultCol";
 
 const provincialJson = require('./../../assets/json/provincial').default;
@@ -325,10 +326,6 @@ export default class DesktopForm extends Component {
         this.state.values[val.field + '_label'] = n;
         value = result;
         break;
-      case 'password':
-      case 'pwd':
-        value = result.target.value.trim();
-        break;
       case 'text':
       case 'textarea':
       case 'multiple':
@@ -504,10 +501,10 @@ export default class DesktopForm extends Component {
                 {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
               <Col {...DefaultCol[c].item} style={styles.formItem}>
-                <span>{I18n.tr('pleaseInput') + item.name}</span>
+                <span>{I18n.tr('pleaseType') + item.name}</span>
                 <Input
                   style={{position: 'absolute', left: 0, top: 0, bottom: 0, right: 0, opacity: 0}}
-                  placeholder={I18n.tr('pleaseInput') + item.name}
+                  placeholder={I18n.tr('pleaseType') + item.name}
                   value={this.state.values[item.field]}
                   readOnly={true}
                   required={item.params && item.params.required ? item.params.required : false}
@@ -553,14 +550,14 @@ export default class DesktopForm extends Component {
                 {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
               <Col {...DefaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={item.field} message={I18n.tr('pleaseInputRight') + item.name}
+                <IceFormBinder name={item.field} message={I18n.tr('pleaseTypeRight') + item.name}
                                valueFormatter={(result) => {
                                  return this.binderValueFormatter(item, result);
                                }}>
                   <Input.TextArea
                     className={`fromItemWidth${c} ${item.type}`}
                     size={size}
-                    placeholder={I18n.tr('pleaseInput') + item.name}
+                    placeholder={I18n.tr('pleaseType') + item.name}
                     defaultValue={this.state.values[item.field]}
                     {...item.params}
                   />
@@ -598,14 +595,14 @@ export default class DesktopForm extends Component {
                 {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
               <Col {...DefaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={item.field} message={I18n.tr('pleaseInputRight') + item.name}
+                <IceFormBinder name={item.field} message={I18n.tr('pleaseTypeRight') + item.name}
                                valueFormatter={(result) => {
                                  return this.binderValueFormatter(item, result);
                                }}>
                   <Input.TextArea
                     className={`fromItemWidth${c} ${item.type}`}
                     size={size}
-                    placeholder={I18n.tr('pleaseInput') + item.name}
+                    placeholder={I18n.tr('pleaseType') + item.name}
                     defaultValue={this.state.values[item.field]}
                     ref={node => this.state.nodeShadow[item.field] = node}
                     {...item.params}
@@ -653,7 +650,7 @@ export default class DesktopForm extends Component {
                     <AutoComplete
                       style={{width: '80%'}}
                       size={size}
-                      placeholder={I18n.tr('pleaseInput') + item.name}
+                      placeholder={I18n.tr('pleaseType') + item.name}
                       onChange={this.renderNet}
                       filterOption={false}
                       hasClear={true}
@@ -678,14 +675,14 @@ export default class DesktopForm extends Component {
                 {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
               <Col {...DefaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={item.field} type="email" message={I18n.tr('pleaseInputRight') + item.name}
+                <IceFormBinder name={item.field} type="email" message={I18n.tr('pleaseTypeRight') + item.name}
                                valueFormatter={(result) => {
                                  return this.binderValueFormatter(item, result);
                                }}>
                   <AutoComplete
                     className={`fromItemWidth${c} ${item.type}`}
                     size={size}
-                    placeholder={I18n.tr('pleaseInput') + item.name}
+                    placeholder={I18n.tr('pleaseType') + item.name}
                     onChange={this.renderEmail}
                     filterOption={false}
                     hasClear={true}
@@ -710,7 +707,7 @@ export default class DesktopForm extends Component {
                 {item.name && item.name.length > 0 && <label>{item.name}：</label>}
               </Col>
               <Col {...DefaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="hex" name={item.field} message={I18n.tr('pleaseInputRightCode')}
+                <IceFormBinder type="hex" name={item.field} message={I18n.tr('pleaseTypeRightCode')}
                                valueFormatter={(result) => {
                                  return this.binderValueFormatter(item, result);
                                }}>
@@ -730,30 +727,15 @@ export default class DesktopForm extends Component {
       case 'pwd':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row>
-              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {item.icon && <Icon className="myIcon" type={item.icon}/>}
-                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
-              </Col>
-              <Col {...DefaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="string" name={item.field} message={I18n.tr('pleaseInput') + item.name}
-                               valueFormatter={(result) => {
-                                 return this.binderValueFormatter(item, result);
-                               }}>
-                  <Input.Password
-                    className={`fromItemWidth${c} ${item.type}`}
-                    type="password"
-                    size={size}
-                    placeholder={I18n.tr('pleaseInput') + item.name}
-                    allowClear={true}
-                    ref={node => this.state.nodeShadow[item.field] = node}
-                    defaultValue={this.state.values[item.field]}
-                    {...item.params}
-                  />
-                </IceFormBinder>
-                <div><IceFormError name={item.field}/></div>
-              </Col>
-            </Row>
+            <ItemPassword
+              required={required}
+              item={item}
+              size={size}
+              col={c}
+              defaultValue={this.state.values[item.field]}
+              onChange={(result) => this.setField(item.field, result)}
+              onError={(error) => this.setErrorStatus(error)}
+            />
           </Col>
         );
         break;
@@ -773,7 +755,7 @@ export default class DesktopForm extends Component {
                   <Input
                     className={`fromItemWidth${c} ${item.type}`}
                     size={size}
-                    placeholder={I18n.tr('pleaseInput') + item.name}
+                    placeholder={I18n.tr('pleaseType') + item.name}
                     allowClear={true}
                     ref={node => this.state.nodeShadow[item.field] = node}
                     defaultValue={this.state.values[item.field]}
@@ -803,7 +785,7 @@ export default class DesktopForm extends Component {
                   <Input
                     className={`fromItemWidth${c} ${item.type}`}
                     size={size}
-                    placeholder={I18n.tr('pleaseInput') + item.name}
+                    placeholder={I18n.tr('pleaseType') + item.name}
                     allowClear={true}
                     ref={node => this.state.nodeShadow[item.field] = node}
                     defaultValue={this.state.values[item.field]}

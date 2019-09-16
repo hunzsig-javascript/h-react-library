@@ -138,7 +138,7 @@ export default class Filter extends Component {
               <Input.TextArea
                 size={size}
                 style={styles.filterTool[1]}
-                placeholder={I18n.tr('pleaseInput') + val.name}
+                placeholder={I18n.tr('pleaseType') + val.name}
                 value={this.props.value[val.field]}
                 ref={node => this.state.nodeShadow[val.field] = node}
                 {...val.params}
@@ -186,7 +186,7 @@ export default class Filter extends Component {
             <Input
               size={size}
               style={styles.filterTool[1]}
-              placeholder={I18n.tr('pleaseInput') + val.name}
+              placeholder={I18n.tr('pleaseType') + val.name}
               allowClear={true}
               ref={node => this.state.nodeShadow[val.field] = node}
               defaultValue={this.props.value[val.field]}
@@ -228,7 +228,7 @@ export default class Filter extends Component {
             <Input
               size={size}
               style={styles.filterTool[1]}
-              placeholder={I18n.tr('pleaseInput') + val.name}
+              placeholder={I18n.tr('pleaseType') + val.name}
               allowClear={true}
               ref={node => this.state.nodeShadow[val.field] = node}
               defaultValue={this.props.value[val.field]}
@@ -454,7 +454,7 @@ export default class Filter extends Component {
               onPressEnter={this.props.onSubmit}
               size={size}
               style={styles.filterTool[1]}
-              placeholder={I18n.tr('pleaseInput') + val.name}
+              placeholder={I18n.tr('pleaseType') + val.name}
               allowClear={true}
               ref={node => this.state.nodeShadow[val.field] = node}
               defaultValue={this.props.value[val.field]}

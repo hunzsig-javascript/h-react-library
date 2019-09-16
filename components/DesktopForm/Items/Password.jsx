@@ -4,9 +4,9 @@ import DefaultCol from "./DefaultCol";
 import Error from "./Error";
 import I18n from "../../../common/I18n";
 
-import "./String.scss";
+import "./Password.scss";
 
-export default class String extends Component {
+export default class Password extends Component {
 
   constructor(props) {
     super(props);
@@ -16,7 +16,7 @@ export default class String extends Component {
   }
 
   formatter = (evt) => {
-    return evt.target.value;
+    return evt.target.value.trim();
   };
 
   render() {
@@ -25,17 +25,19 @@ export default class String extends Component {
     const size = this.props.size;
     const col = this.props.col;
     const defaultValue = this.props.defaultValue;
+    const className = `col${col} string` + (this.state.errorMessage !== '' ? ' error' : '');
     const onChange = this.props.onChange;
     const onError = this.props.onError;
     return (
-      <Row className="ItemString">
+      <Row className="ItemPassword">
         <Col {...DefaultCol[col].label} className={`label ${required ? 'required' : ''}`}>
           {item.icon && <Icon className="icon" type={item.icon}/>}
           {item.label && item.label.length > 0 && <label>{item.label}：</label>}
         </Col>
         <Col className="scope" {...DefaultCol[col].item}>
-          <Input
-            className={`col${col} slice` + (this.state.errorMessage !== '' ? ' error' : '')}
+          <Input.Password
+            className={className}
+            type="password"
             size={size}
             allowClear={true}
             placeholder={I18n.tr('pleaseType') + item.label}

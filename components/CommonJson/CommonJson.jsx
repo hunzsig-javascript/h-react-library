@@ -138,7 +138,7 @@ class ThisPage extends Component {
               for (const f in this.jsonFields) {
                 if (jsonValuesRequired[f] === true) {
                   if (result[f] === undefined || result[f] === null) {
-                    error = `${I18n.tr('pleaseInputValue')} ${f}`;
+                    error = `${I18n.tr('pleaseTypeValue')} ${f}`;
                     break;
                   }
                 }
@@ -232,7 +232,7 @@ class ThisPage extends Component {
               for (const f in this.jsonFields) {
                 if (jsonValuesRequired[f] === true) {
                   if (result[f] === undefined || result[f] === null) {
-                    error = `${I18n.tr('pleaseInputValue')} ${f}`;
+                    error = `${I18n.tr('pleaseTypeValue')} ${f}`;
                     break;
                   }
                 }
