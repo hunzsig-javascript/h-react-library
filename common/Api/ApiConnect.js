@@ -51,7 +51,7 @@ const ApiConnect = function (setting) {
           crypto: this.crypto,
         });
         break;
-      case 'HTTP.SHARP':
+      case 'HTTP#':
         Http.PathLogin = '/#' + Auth.getLoginPath();
         Http.cache({
           host: this.host,
@@ -81,7 +81,7 @@ const ApiConnect = function (setting) {
           crypto: this.crypto,
         });
         break;
-      case 'WS.SHARP':
+      case 'WS#':
         Ws.PathLogin = '/#' + Auth.getLoginPath();
         Ws.cache({
           host: this.host,
@@ -116,7 +116,7 @@ const ApiConnect = function (setting) {
           crypto: this.crypto,
         });
         break;
-      case 'HTTP.SHARP':
+      case 'HTTP#':
         Http.PathLogin = '/#' + Auth.getLoginPath();
         Http.real({
           host: this.host,
@@ -146,7 +146,7 @@ const ApiConnect = function (setting) {
           crypto: Api.crypto,
         });
         break;
-      case 'WS.SHARP':
+      case 'WS#':
         Ws.PathLogin = '/#' + Auth.getLoginPath();
         Ws.real({
           host: this.host,

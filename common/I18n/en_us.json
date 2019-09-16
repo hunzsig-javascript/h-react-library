@@ -115,5 +115,8 @@
   "wait": "wait",
   "waitAMoment": "Wait a moment",
   "yes": "yes",
-  "isRequired": "is required"
+  "isRequired": "is required",
+  "tooShort": "too short",
+  "tooLong": "too long",
+  "accessing": "accessing..."
 }

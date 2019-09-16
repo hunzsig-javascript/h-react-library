@@ -115,5 +115,8 @@
   "wait": "稍后",
   "waitAMoment": "请稍等",
   "yes": "是",
-  "isRequired": "必填"
+  "isRequired": "必填",
+  "tooShort": "太短",
+  "tooLong": "太长",
+  "accessing": "访问中..."
 }

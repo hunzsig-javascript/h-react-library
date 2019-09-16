@@ -43,9 +43,17 @@ export default class String extends Component {
             defaultValue={defaultValue}
             onChange={(evt) => {
               const res = this.formatter(evt);
-              if (item.params && item.params.required) {
-                this.state.errorMessage = !res ? item.label + I18n.tr('isRequired') : '';
-              }
+              if (item.params) {
+                if (item.params.required) {
+                  this.state.errorMessage = !res ? item.label + I18n.tr('isRequired') : '';
+                }
+                if (item.params.minLength && res.length < item.params.minLength) {
+                  this.state.errorMessage = item.label + I18n.tr('tooShort');
+                }
+                if (item.params.maxLength && res.length > item.params.maxLength) {
+                  this.state.errorMessage = item.label + I18n.tr('tooLong');
+                }
+              }W
               this.setState({
                 errorMessage: this.state.errorMessage,
               });
